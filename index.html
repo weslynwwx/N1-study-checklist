@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N1备考打卡系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .stat-card .number {
+            font-size: 2.5em;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .stat-card .progress-bar {
+            margin-top: 10px;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .stat-card .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .controls input, .controls select, .controls button {
+            padding: 12px 20px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .controls input, .controls select {
+            background: white;
+            color: #333;
+        }
+
+        .controls button {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+            border: none;
+        }
+
+        .controls button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .date-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .date-navigation button {
+            width: 50px;
+            padding: 12px;
+        }
+
+        .current-date {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .schedule-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .schedule-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .schedule-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+
+        .schedule-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .schedule-header.completed {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .schedule-content {
+            padding: 20px;
+        }
+
+        .time-slot {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .time-slot:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .time-label {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .task-item.completed {
+            background: #f0f9ff;
+            border-left-color: #38ef7d;
+            opacity: 0.8;
+        }
+
+        .task-item.completed .task-content {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .task-checkbox {
+            width: 24px;
+            height: 24px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: #667eea;
+            flex-shrink: 0;
+        }
+
+        .task-content {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .task-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 6px;
+            font-size: 0.95em;
+        }
+
+        .task-description {
+            color: #666;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+
+        .task-duration {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            margin-top: 6px;
+        }
+
+        .guide-button {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 6px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.3s ease;
+        }
+
+        .guide-button:hover {
+            background: #764ba2;
+        }
+
+        .guide-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .guide-modal.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .guide-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .guide-content h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .guide-content h3 {
+            color: #764ba2;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .guide-content p {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .guide-content ul, .guide-content ol {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .guide-content li {
+            margin-bottom: 8px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .guide-step {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .close-guide {
+            float: right;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            color: #999;
+            transition: all 0.3s ease;
+        }
+
+        .close-guide:hover {
+            color: #333;
+        }
+
+        .daily-summary {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .summary-value {
+            color: #333;
+        }
+
+        .weekend {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+
+        .weekend .schedule-header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .schedule-container {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .controls input, .controls select, .controls button {
+                width: 100%;
+            }
+
+            .guide-content {
+                max-width: 90%;
+                padding: 20px;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            margin-top: 30px;
+            opacity: 0.8;
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .language-selector button {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .language-selector button.active {
+            background: white;
+            color: #667eea;
+        }
+
+        .export-btn {
+            background: #38ef7d !important;
+        }
+
+        .export-btn:hover {
+            background: #11998e !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 N1备考打卡系统</h1>
+            <p>坚持81天，通过N1考试！ 加油💪</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">考试日期: 2026年12月4日</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3>总任务数</h3>
+                <div class="number" id="totalTasks">0</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="totalProgressFill" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <h3>已完成</h3>
+                <div class="number" id="completedTasks">0</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="completedProgressFill" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <h3>完成率</h3>
+                <div class="number" id="completionRate">0%</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="rateProgressFill" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <h3>连续完成天数</h3>
+                <div class="number" id="consecutiveDays">0</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="consecutiveProgressFill" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="date-navigation">
+                <button onclick="previousDate()">← 前一天</button>
+                <div>
+                    <input type="date" id="dateSelector" onchange="selectDate()">
+                    <div class="current-date" id="currentDateDisplay">今日</div>
+                </div>
+                <button onclick="nextDate()">后一天 →</button>
+            </div>
+            <button onclick="resetAll()" style="background: #ff6b6b; border-color: #ff6b6b;">🔄 重置所有</button>
+            <button class="export-btn" onclick="exportData()">📊 导出数据</button>
+        </div>
+
+        <div class="schedule-container" id="scheduleContainer">
+            <!-- 动态生成的日程卡片 -->
+        </div>
+
+        <div class="daily-summary">
+            <h3 style="color: #667eea; margin-bottom: 15px;">📋 今日任务总结</h3>
+            <div class="summary-row">
+                <span class="summary-label">总任务数：</span>
+                <span class="summary-value" id="todayTotalTasks">0</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">已完成：</span>
+                <span class="summary-value" id="todayCompletedTasks">0</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">完成进度：</span>
+                <span class="summary-value" id="todayProgress">0%</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">预计完成时间：</span>
+                <span class="summary-value" id="estimatedTime">-</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>💡 每天坚持打卡，记录学习进度。你的努力终将开花结果！</p>
+            <p>© N1备考打卡系统 - 祝你12月4日考试顺利通过！🎯</p>
+        </div>
+    </div>
+
+    <!-- 指南弹窗 -->
+    <div class="guide-modal" id="guideModal">
+        <div class="guide-content">
+            <span class="close-guide" onclick="closeGuide()">&times;</span>
+            <div id="guideText"></div>
+        </div>
+    </div>
+
+    <script>
+        // 学习计划数据
+        const scheduleData = {
+            // 阶段一: 9月14日-9月30日
+            '2026-09-14': {
+                dayType: 'sunday',
+                dayName: '周日',
+                isWeekend: false,
+                stage: '阶段一（启动期）',
+                cards: [
+                    {
+                        period: '上午 8:00-8:30',
+                        title: '📖 单词新学：必考词第1-50词',
+                        duration: '30分钟',
+                        tasks: [
+                            {
+                                title: '在识日APP中录入新词',
+                                description: '将第1-50个必考词在APP中完成录入',
+                                guide: `
+                                    <h2>识日APP单词录入指南</h2>
+                                    <div class="guide-step">
+                                        <h3>第一步：打开识日APP</h3>
+                                        <p>进入APP首页，选择"新建学习"或"添加单词"选项</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>第二步：逐个录入单词</h3>
+                                        <ol>
+                                            <li>输入日文单词（如：「勇気」）</li>
+                                            <li>输入假名注音（如：ゆうき）</li>
+                                            <li>输入中文含义（如：勇气）</li>
+                                            <li>记录例句的大意（可选）</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>第三步：复习设置</h3>
+                                        <p>确保APP自动生成复习计划（默认艾宾浩斯间隔）</p>
+                                    </div>
+                                    <h3>💡 重点提示</h3>
+                                    <ul>
+                                        <li>每个词都要完整输入，包括假名和中文</li>
+                                        <li>发音要标准，后续影子跟读时会用到</li>
+                                        <li>不要跳过任何一个词</li>
+                                        <li>速度不要太快，确保录入准确</li>
+                                    </ul>
+                                `
+                            },
+                            {
+                                title: '每个词的学习步骤',
+                                description: '①读日文发音2遍 ②看中文含义1遍 ③记例句大意',
+                                guide: `
+                                    <h2>单词学习五步法</h2>
+                                    <div class="guide-step">
+                                        <h3>第一步：听发音</h3>
+                                        <p>点击APP中的"发音"按钮，认真听2遍，体会日语的音韵</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>第二步：看含义</h3>
+                                        <p>阅读中文含义，确保理解这个词的核心意思</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>第三步：学例句</h3>
+                                        <p>看例句，理解这个词在实际语境中怎么用</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>第四步：自我测试</h3>
+                                        <p>合上例句，只看日文，尝试回忆中文意思</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>第五步：标记难点</h3>
+                                        <p>如果难以记住，在APP中标记为"需要加强"</p>
+                                    </div>
+                                    <h3>⏱️ 时间分配</h3>
+                                    <p>50个词，约30分钟内完成（每个词30秒）</p>
+                                `
+                            }
+                        ]
+                    },
+                    {
+                        period: '晚上 20:00-20:40',
+                        title: '🔄 APP复习：当日触发词',
+                        duration: '40分钟',
+                        tasks: [
+                            {
+                                title: '完成APP复习',
+                                description: '完成识日APP推送的当日复习任务',
+                                guide: `
+                                    <h2>APP复习操作指南</h2>
+                                    <div class="guide-step">
+                                        <h3>识日APP复习规则</h3>
+                                        <p>首日新学的词当天无法进入复习栏（APP设计如此）</p>
+                                        <p>所以第一天的40分钟复习，用于"再次学习新词"而非"复习复习"</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>具体操作</h3>
+                                        <ol>
+                                            <li>打开APP的"复习"栏（首日可能为空）</li>
+                                            <li>如果有触发的复习，完成所有复习题</li>
+                                            <li>如果无复习，返回新学的50词，再过一遍</li>
+                                            <li>重点复习记忆困难的词</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>复习技巧</h3>
+                                        <ul>
+                                            <li>遮住中文，只看日文尝试回忆</li>
+                                            <li>用"听→看→说"的方式复习</li>
+                                            <li>对错题标记，后续重点复习</li>
+                                        </ul>
+                                    </div>
+                                    <h3>📊 APP复习上限</h3>
+                                    <p>每天复习上限100词。如果当日触发超过100词，优先完成复习。</p>
+                                `
+                            },
+                            {
+                                title: '遮住中文，回忆生词',
+                                description: '用手指或纸遮住APP上的中文，只看日文尝试回忆',
+                                guide: `
+                                    <h2>单词复习技巧：遮住法</h2>
+                                    <div class="guide-step">
+                                        <h3>为什么要遮住中文？</h3>
+                                        <p>●让大脑主动回忆，而不是被动识别</p>
+                                        <p>●这样的记忆更深刻，持久力更强</p>
+                                        <p>●更接近考试的实际情景（听力/阅读时无法查字典）</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>遮住法步骤</h3>
+                                        <ol>
+                                            <li>打开APP，显示一个单词</li>
+                                            <li>用手指或纸片遮住中文含义</li>
+                                            <li>只看日文，花3-5秒尝试回忆</li>
+                                            <li>说出中文意思（大声说出来效果更好）</li>
+                                            <li>移开遮挡物，检查答案</li>
+                                            <li>重复此过程</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>记忆困难怎么办？</h3>
+                                        <p>●不用纠结，正常。今天记不住，明天APP会自动复习</p>
+                                        <p>●在APP中标记为"困难"，后续重点加强</p>
+                                        <p>●每天坚持，积累会逐渐形成</p>
+                                    </div>
+                                `
+                            }
+                        ]
+                    },
+                    {
+                        period: '晚上 20:40-21:30',
+                        title: '📚 语法学习：大纲第1单元',
+                        duration: '50分钟',
+                        tasks: [
+                            {
+                                title: '学习语法大纲第1单元（5-6条）',
+                                description: '打开《N1语法大纲》，开始学习第1个单元',
+                                guide: `
+                                    <h2>语法大纲第1单元学习指南</h2>
+                                    <div class="guide-step">
+                                        <h3>学习流程（每个单元约50分钟）</h3>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>前20分钟：复习上次内容</h3>
+                                        <p>•首次学习时无需复习，直接学新内容</p>
+                                        <p>•从第2个单元开始，先复习前一个单元</p>
+                                        <p>•只看标红的弱点，不需要全部复习</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>中20分钟：学习新单元</h3>
+                                        <ol>
+                                            <li>打开N1语法大纲第1单元</li>
+                                            <li>逐条学习每个语法点：
+                                                <ul>
+                                                    <li>读接续方式（如～ている）</li>
+                                                    <li>看日文解释</li>
+                                                    <li>看例句（2-3个）</li>
+                                                    <li>理解用法和含义</li>
+                                                </ul>
+                                            </li>
+                                            <li>遇到难点，标红记号</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>后10分钟：合书自测</h3>
+                                        <ol>
+                                            <li>合上书本</li>
+                                            <li>尝试回忆第1单元中的5-6条语法名称</li>
+                                            <li>能说出几条就说几条</li>
+                                            <li>说不出的再翻书确认</li>
+                                        </ol>
+                                    </div>
+                                    <h3>💡 学习建议</h3>
+                                    <ul>
+                                        <li>不要求一次性全记住，多次复习才能掌握</li>
+                                        <li>重点是"理解"而非"背诵"</li>
+                                        <li>每条语法写一个例句，加深印象</li>
+                                    </ul>
+                                `
+                            },
+                            {
+                                title: '手写本单元例句',
+                                description: '在笔记本上手写1-2条例句，加强记忆',
+                                guide: `
+                                    <h2>手写例句加强法</h2>
+                                    <div class="guide-step">
+                                        <h3>为什么要手写？</h3>
+                                        <p>●手写能激活更多脑区，记忆效果更好</p>
+                                        <p>●写的过程中能发现自己的理解漏洞</p>
+                                        <p>●留下笔记便于后续复习</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>手写步骤</h3>
+                                        <ol>
+                                            <li>准备一个笔记本（用来记录语法学习）</li>
+                                            <li>写上"第1单元"作为标题</li>
+                                            <li>逐条写下语法点的名称</li>
+                                            <li>为每条语法写1-2个例句</li>
+                                            <li>必要时写上中文翻译</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>例句选择</h3>
+                                        <p>●可以用大纲中的例句</p>
+                                        <p>●也可以自己造句（如果能的话）</p>
+                                        <p>●简单易记的最好</p>
+                                    </div>
+                                `
+                            }
+                        ]
+                    },
+                    {
+                        period: '晚上 21:30-22:00',
+                        title: '📖 阅读精读：2019/12真题 问题8第1篇',
+                        duration: '30分钟',
+                        tasks: [
+                            {
+                                title: '了解N1阅读题型结构',
+                                description: '不做题，只浏览题型，看问题8的题面和文章结构',
+                                guide: `
+                                    <h2>N1阅读题型初识</h2>
+                                    <div class="guide-step">
+                                        <h3>问题8是什么？</h3>
+                                        <p>●短篇阅读题</p>
+                                        <p>●每篇文章约300-400字</p>
+                                        <p>●每篇3-4个问题</p>
+                                        <p>●共4篇短篇（总计约1500字）</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>今日任务：不做题，只看结构</h3>
+                                        <ol>
+                                            <li>打开2019年12月N1真题</li>
+                                            <li>找到阅读部分（在听力前面）</li>
+                                            <li>找到"問題8"（通常在阅读前半部分）</li>
+                                            <li>看第1篇短篇的题面</li>
+                                            <li>浏览文章，了解整体结构</li>
+                                            <li>看看有几个问题，每个问题问什么</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>第1天只需要</h3>
+                                        <p>●知道N1阅读是怎样的</p>
+                                        <p>●不需要全部理解内容</p>
+                                        <p>●不需要做题</p>
+                                        <p>●只需要"眼熟"</p>
+                                    </div>
+                                `
+                            },
+                            {
+                                title: '试读第1篇短篇',
+                                description: '不查词，快速扫一遍，了解文章大意',
+                                guide: `
+                                    <h2>快速扫读法</h2>
+                                    <div class="guide-step">
+                                        <h3>扫读的目的</h3>
+                                        <p>●不是全部理解，而是了解"这篇文章讲什么"</p>
+                                        <p>●培养快速阅读的能力</p>
+                                        <p>●为后续精读做准备</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>扫读步骤</h3>
+                                        <ol>
+                                            <li>看标题，猜测文章主题</li>
+                                            <li>快速读全文（2-3分钟），不查词</li>
+                                            <li>遇到完全不认识的词可以跳过</li>
+                                            <li>读完后，用一句话总结文章主题</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>常见问题</h3>
+                                        <p>Q: 有很多词不认识，怎么办？</p>
+                                        <p>A: 正常。今天是第1天，你的任务不是全部理解，而是适应。</p>
+                                    </div>
+                                `
+                            }
+                        ]
+                    }
+                ]
+            },
+
+            // 阶段二示例（10月1日）
+            '2026-10-01': {
+                dayType: 'wednesday',
+                dayName: '周三',
+                isWeekend: false,
+                stage: '阶段二（精读期第1天）',
+                cards: [
+                    {
+                        period: '上午 10:00-10:30',
+                        title: '📖 单词新学：必考词第851-900词',
+                        duration: '30分钟',
+                        tasks: [
+                            {
+                                title: '在识日APP中录入新词',
+                                description: '将必考词第851-900共50个词录入APP',
+                                guide: `
+                                    <h2>阶段二单词新学指南</h2>
+                                    <div class="guide-step">
+                                        <h3>今天的进度</h3>
+                                        <p>●累计学习：850词（阶段一）+ 50词 = 900词</p>
+                                        <p>●距目标：还需学习1780词</p>
+                                        <p>●预计完成日期：12月2日</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>与阶段一的区别</h3>
+                                        <p>●速度不变：仍是30分钟50词</p>
+                                        <p>●复习增加：APP中会开始出现已学词的复习任务</p>
+                                        <p>●难度可能升高：必考词后期可能包含较难词汇</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>操作步骤</h3>
+                                        <ol>
+                                            <li>打开绿宝书《必考词2680词》或电子版</li>
+                                            <li>找到第851-900词的部分</li>
+                                            <li>逐个在APP中录入（同阶段一方法）</li>
+                                            <li>每个词都要包含：日文、假名、中文、例句</li>
+                                        </ol>
+                                    </div>
+                                `
+                            }
+                        ]
+                    },
+                    {
+                        period: '上午 10:30-11:10',
+                        title: '🔄 APP复习：当日触发词',
+                        duration: '40分钟',
+                        tasks: [
+                            {
+                                title: '完成APP当日复习任务',
+                                description: '完成识日APP推送的复习（可能已包含前面学的词）',
+                                guide: `
+                                    <h2>APP复习进阶指南</h2>
+                                    <div class="guide-step">
+                                        <h3>今天会发生什么</h3>
+                                        <p>●APP会推送前面学过的词的复习任务</p>
+                                        <p>●可能有50-80个词触发复习</p>
+                                        <p>●总复习量不超过100词（APP上限）</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>复习操作</h3>
+                                        <ol>
+                                            <li>打开APP"复习"栏</li>
+                                            <li>按顺序完成每个复习题</li>
+                                            <li>用遮住法（只看日文猜中文）</li>
+                                            <li>标记做错的词</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>复习效率优化</h3>
+                                        <p>●复习永远优先于新学</p>
+                                        <p>●如果复习量超过40分钟，新学需要压缩或推迟</p>
+                                        <p>●宁愿少学10个新词，也要把已学词复习到位</p>
+                                    </div>
+                                `
+                            }
+                        ]
+                    },
+                    {
+                        period: '上午 11:10-12:00',
+                        title: '📚 语法学习：大纲第15单元 + 复习1-5单元',
+                        duration: '50分钟',
+                        tasks: [
+                            {
+                                title: '学习大纲第15单元',
+                                description: '学习第15个单元的5-6条新语法',
+                                guide: `
+                                    <h2>语法大纲第15单元</h2>
+                                    <p>到阶段二开始时，你已经学完了1-14单元。</p>
+                                    <p>现在开始学习第15单元，继续推进。</p>
+                                    <div class="guide-step">
+                                        <h3>学习步骤（同之前）</h3>
+                                        <ol>
+                                            <li>打开大纲第15单元</li>
+                                            <li>逐条学习新语法</li>
+                                            <li>理解接续、含义、用法</li>
+                                            <li>手写例句</li>
+                                            <li>合书自测</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>总体进度</h3>
+                                        <p>●已完成：第1-14单元（第1轮完成）</p>
+                                        <p>●今日：学第15单元</p>
+                                        <p>●目标：10月7日完成第20单元（整个大纲第1轮）</p>
+                                    </div>
+                                `
+                            },
+                            {
+                                title: '复习第1-5单元',
+                                description: '用白纸遮住解释，只看语法名称，默想含义和接续',
+                                guide: `
+                                    <h2>第2轮复习：复习第1-5单元</h2>
+                                    <div class="guide-step">
+                                        <h3>为什么要复习已学内容？</h3>
+                                        <p>●防止遗忘</p>
+                                        <p>●加深理解</p>
+                                        <p>●为后续测试做准备</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>复习方法：遮住法</h3>
+                                        <ol>
+                                            <li>打开语法大纲第1-5单元</li>
+                                            <li>用白纸或手指遮住"含义和例句"部分</li>
+                                            <li>只看"语法名称"（如～ている）</li>
+                                            <li>花3-5秒，尝试回忆：
+                                                <ul>
+                                                    <li>这个语法是什么意思？</li>
+                                                    <li>接续方式是什么？</li>
+                                                    <li>典型例句是什么？</li>
+                                                </ul>
+                                            </li>
+                                            <li>说出答案后，移开纸片检查</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>标记难点</h3>
+                                        <p>●如果某条语法回忆困难，用红笔标记</p>
+                                        <p>●这些标记项是后续重点复习对象</p>
+                                    </div>
+                                `
+                            }
+                        ]
+                    },
+                    {
+                        period: '下午 13:00-14:00',
+                        title: '📖 阅读精读：2020/6真题 问题8第1-2篇',
+                        duration: '60分钟',
+                        tasks: [
+                            {
+                                title: '通读第1篇短篇（3分钟）',
+                                description: '不查词，快速读全文，标出不认识的词',
+                                guide: `
+                                    <h2>阅读精读四步法 - 第一步：通读</h2>
+                                    <div class="guide-step">
+                                        <h3>通读的目的</h3>
+                                        <p>●了解文章大意</p>
+                                        <p>●确定文章主题和逻辑</p>
+                                        <p>●标记出不认识的词</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>通读步骤</h3>
+                                        <ol>
+                                            <li>看标题，预测内容</li>
+                                            <li>按照自然速度读全文（目标3分钟）</li>
+                                            <li>遇到不认识的词，用笔圆圈标记，但继续读</li>
+                                            <li>完成后，用一句话总结文章主旨</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>关键提醒</h3>
+                                        <p>●不要查词，不要查语法</p>
+                                        <p>●不要停顿，流畅读完很重要</p>
+                                        <p>●这是训练快速理解的能力</p>
+                                    </div>
+                                `
+                            },
+                            {
+                                title: '做题（2-3分钟）',
+                                description: '根据大意，快速选择答案，标记不确定的题',
+                                guide: `
+                                    <h2>阅读四步法 - 第二步：做题</h2>
+                                    <div class="guide-step">
+                                        <h3>做题的要点</h3>
+                                        <p>●在通读的基础上，直接做题</p>
+                                        <p>●不需要重新读全文</p>
+                                        <p>●根据印象和逻辑选择</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>做题步骤</h3>
+                                        <ol>
+                                            <li>看第1个问题</li>
+                                            <li>回想文中对应的内容</li>
+                                            <li>在四个选项中选最合理的</li>
+                                            <li>如果不确定，先标记，继续做下一题</li>
+                                            <li>全部做完后，检查标记题</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>速度目标</h3>
+                                        <p>●短篇通常3-4题</p>
+                                        <p>●目标2-3分钟完成</p>
+                                        <p>●这对应正式考试时的时间压力</p>
+                                    </div>
+                                `
+                            },
+                            {
+                                title: '精读全文（25分钟）',
+                                description: '逐句精读，查不认识的词和语法，整理生词本',
+                                guide: `
+                                    <h2>阅读四步法 - 第三步：精读</h2>
+                                    <div class="guide-step">
+                                        <h3>精读的目的</h3>
+                                        <p>●彻底理解文章每一句</p>
+                                        <p>●积累词汇和语法</p>
+                                        <p>●理解为什么这个答案是对的</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>精读步骤</h3>
+                                        <ol>
+                                            <li>重新读第1句</li>
+                                            <li>找出不认识的词，查字典或词汇书</li>
+                                            <li>找出不懂的语法，查语法大纲</li>
+                                            <li>写进生词本：
+                                                <ul>
+                                                    <li>日文词</li>
+                                                    <li>中文意思</li>
+                                                    <li>该句的翻译</li>
+                                                </ul>
+                                            </li>
+                                            <li>逐句重复此过程</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>生词本格式示例</h3>
+                                        <p>日文：「生涯」</p>
+                                        <p>中文：生涯、终身</p>
+                                        <p>用法例句：その人の生涯を通じて、努力は欠かせない。</p>
+                                    </div>
+                                `
+                            },
+                            {
+                                title: '重新读全文（5分钟）',
+                                description: '精读后，再读一遍全文，确认理解无误',
+                                guide: `
+                                    <h2>阅读四步法 - 第四步：复读确认</h2>
+                                    <div class="guide-step">
+                                        <h3>复读的目的</h3>
+                                        <p>●确保全文理解完整</p>
+                                        <p>●查漏补缺</p>
+                                        <p>●形成整体认知</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>复读步骤</h3>
+                                        <ol>
+                                            <li>从头快速读全文一遍</li>
+                                            <li>这次可以用正常/快速速度</li>
+                                            <li>不需要逐词理解，只要感觉能懂就行</li>
+                                            <li>检查是否有理解偏差</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>预期效果</h3>
+                                        <p>●精读后的复读，应该能轻松理解全文</p>
+                                        <p>●这说明你的学习有效</p>
+                                    </div>
+                                `
+                            }
+                        ]
+                    },
+                    {
+                        period: '下午 14:00-15:00',
+                        title: '📖 阅读精读复盘：整理生词和语法',
+                        duration: '60分钟',
+                        tasks: [
+                            {
+                                title: '做同套真题的第2篇短篇',
+                                description: '重复上述通读→做题→精读→复读的四步法',
+                                guide: `
+                                    <h2>第2篇短篇学习流程</h2>
+                                    <p>和第1篇相同，继续执行"阅读精读四步法"：</p>
+                                    <ol>
+                                        <li>通读（3分钟）</li>
+                                        <li>做题（2-3分钟）</li>
+                                        <li>精读（20分钟）</li>
+                                        <li>复读（2分钟）</li>
+                                    </ol>
+                                    <p>这样做可以巩固方法，效果会更好。</p>
+                                `
+                            },
+                            {
+                                title: '整理本日生词本',
+                                description: '统整第1-2篇中出现的所有生词，写入专门的生词笔记本',
+                                guide: `
+                                    <h2>生词本整理指南</h2>
+                                    <div class="guide-step">
+                                        <h3>为什么要整理生词本？</h3>
+                                        <p>●集中管理学过的词汇</p>
+                                        <p>●便于后续重复复习</p>
+                                        <p>●建立个人的"词汇库"</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>生词本准备</h3>
+                                        <ol>
+                                            <li>准备一个物理笔记本或电子文档</li>
+                                            <li>按学习顺序记录（可按日期分类）</li>
+                                            <li>每个词的格式：
+                                                <ul>
+                                                    <li>日文</li>
+                                                    <li>假名</li>
+                                                    <li>中文意思</li>
+                                                    <li>来源文章/出处</li>
+                                                    <li>例句</li>
+                                                </ul>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>今日任务</h3>
+                                        <p>●把2020/6真题问题8第1-2篇中的所有生词整理到笔记本</p>
+                                        <p>●预计30-50个新词</p>
+                                    </div>
+                                `
+                            }
+                        ]
+                    },
+                    {
+                        period: '下午 15:30-16:30',
+                        title: '🎧 听力精听：2020/6真题 問題1第1-3题',
+                        duration: '60分钟',
+                        tasks: [
+                            {
+                                title: '精听六步法第1步：正常听+做题',
+                                description: '不看原文，正常听一遍，直接做选择题',
+                                guide: `
+                                    <h2>听力精听六步法 - 第一步：初听做题</h2>
+                                    <div class="guide-step">
+                                        <h3>這一步的目标</h3>
+                                        <p>●了解你目前的听力水平</p>
+                                        <p>●测试能听懂多少</p>
+                                        <p>●记录哪些地方没听清</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>操作步骤</h3>
+                                        <ol>
+                                            <li>打开2020/6真题听力部分</li>
+                                            <li>找到"問題1"</li>
+                                            <li>第1题：听一遍，立刻选答案</li>
+                                            <li>第2题：同上</li>
+                                            <li>第3题：同上</li>
+                                            <li>记录：哪些题做对了，哪些题做错了</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>重要提示</h3>
+                                        <p>●不要看原文，考试时也看不到</p>
+                                        <p>●不要暂停，听完才能选</p>
+                                        <p>●做错不要紧，这是学习的开始</p>
+                                    </div>
+                                `
+                            },
+                            {
+                                title: '精听六步法第2-3步：对答案+看原文再听',
+                                description: '对答案，看对错原因；再听一遍同时看原文',
+                                guide: `
+                                    <h2>听力精听六步法 - 第2-3步：对答案+原文复听</h2>
+                                    <div class="guide-step">
+                                        <h3>第2步：对答案</h3>
+                                        <ol>
+                                            <li>拿出答案卡</li>
+                                            <li>逐题对照</li>
+                                            <li>标记哪些题做错了</li>
+                                            <li>分析：是听不懂词？还是没理解逻辑？</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>第3步：听+看原文</h3>
+                                        <ol>
+                                            <li>打开该题的日文原文/脚本</li>
+                                            <li>同时播放音频</li>
+                                            <li>边听边看原文，追踪发音</li>
+                                            <li>标记：
+                                                <ul>
+                                                    <li>听不清的词</li>
+                                                    <li>陌生的词汇</li>
+                                                    <li>复杂的句型</li>
+                                                </ul>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>为什么这样做？</h3>
+                                        <p>●对比听不到的部分和实际发音</p>
+                                        <p>●找出听力的"盲点"</p>
+                                        <p>●为后续改进做准备</p>
+                                    </div>
+                                `
+                            },
+                            {
+                                title: '精听六步法第4-5步：查生词+跟读',
+                                description: '查不认识的词；大声跟读2-3遍，追求发音相似',
+                                guide: `
+                                    <h2>听力精听六步法 - 第4-5步：查词+跟读</h2>
+                                    <div class="guide-step">
+                                        <h3>第4步：查生词</h3>
+                                        <ol>
+                                            <li>整理在第3步中标记的陌生词</li>
+                                            <li>逐个查字典或词汇表</li>
+                                            <li>记进生词本：日文、中文、例句</li>
+                                            <li>着重记下"听力中的常见词"</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>第5步：跟读训练</h3>
+                                        <ol>
+                                            <li>播放同一段音频</li>
+                                            <li>看着原文，大声跟读</li>
+                                            <li>追求：
+                                                <ul>
+                                                    <li>发音接近</li>
+                                                    <li>语速接近</li>
+                                                    <li>语调接近</li>
+                                                </ul>
+                                            </li>
+                                            <li>跟读2-3遍</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>跟读注意事项</h3>
+                                        <p>●这里允许看原文，因为是学习阶段</p>
+                                        <p>●大声说话，不要小声</p>
+                                        <p>●后续"影子跟读"才是不看原文的</p>
+                                    </div>
+                                `
+                            },
+                            {
+                                title: '精听六步法第6步：复听检验',
+                                description: '不看原文，再听一遍，检验理解率是否提升',
+                                guide: `
+                                    <h2>听力精听六步法 - 第6步：复听检验</h2>
+                                    <div class="guide-step">
+                                        <h3>这一步的目的</h3>
+                                        <p>●验证精听的效果</p>
+                                        <p>●对比第一次听的理解率</p>
+                                        <p>●确认是否掌握了内容</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>操作步骤</h3>
+                                        <ol>
+                                            <li>不看原文</li>
+                                            <li>再播放一遍同一段音频</li>
+                                            <li>不需要做题，只是听</li>
+                                            <li>感受理解程度是否提高了</li>
+                                            <li>如果还是有听不清的部分，再标记</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>预期效果</h3>
+                                        <p>●第一次听：可能理解50-60%</p>
+                                        <p>●经过5步精听：应该能理解80-90%</p>
+                                        <p>●这就是学习的进步</p>
+                                    </div>
+                                `
+                            }
+                        ]
+                    },
+                    {
+                        period: '下午 16:30-17:00',
+                        title: '🎧 影子跟读：复习昨日精听材料',
+                        duration: '30分钟',
+                        tasks: [
+                            {
+                                title: '影子跟读入门',
+                                description: '用前面精听过的题目，尝试影子跟读（实时跟读）',
+                                guide: `
+                                    <h2>影子跟读完整指南（10月1日版）</h2>
+                                    <div class="guide-step">
+                                        <h3>什么是影子跟读？</h3>
+                                        <p>●播放日语音频</p>
+                                        <p>●你同时大声朗读日文</p>
+                                        <p>●追求和原音一样的速度、语调、节奏</p>
+                                        <p>●你就像音频的"影子"，紧紧跟着</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>阶段一的影子跟读任务</h3>
+                                        <p>●用精听过的题目（2019/12真题）</p>
+                                        <p>●每天只做10-15分钟</p>
+                                        <p>●目标是"熟悉方法"，不是"大量训练"</p>
+                                        <p>●第1周就是学习怎样做影子跟读</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>今日操作（10月1日）</h3>
+                                        <ol>
+                                            <li>选择一段之前精听过的题目（如2019/12 問題1第1题）</li>
+                                            <li>这段音频你已经听过很多遍，比较熟悉</li>
+                                            <li>按照下面的"三遍跟读法"执行</li>
+                                        </ol>
+                                    </div>
+                                `
+                            },
+                            {
+                                title: '三遍跟读法：第1遍热身',
+                                description: '第1遍：可以看原文，小声跟读，适应速度',
+                                guide: `
+                                    <h2>影子跟读三遍法 - 第1遍热身</h2>
+                                    <div class="guide-step">
+                                        <h3>第1遍的目的</h3>
+                                        <p>●让大脑和嘴巴适应</p>
+                                        <p>●不要求准确，只要适应速度</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>操作步骤</h3>
+                                        <ol>
+                                            <li>打开音频和日文原文</li>
+                                            <li>播放音频</li>
+                                            <li>边看原文，边小声跟读</li>
+                                            <li>尽量跟上音频的速度</li>
+                                            <li>完成一遍</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>可能遇到的问题</h3>
+                                        <p>●跟不上：正常，第1遍就是这样</p>
+                                        <p>●掉队频繁：可能速度太快，没关系</p>
+                                        <p>●预期效果：只能跟上30-50%，这是正常的</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>这一遍用时</h3>
+                                        <p>●如果音频是3分钟，这一遍就是3-4分钟</p>
+                                        <p>●加上播放停止和调整的时间，约5分钟</p>
+                                    </div>
+                                `
+                            },
+                            {
+                                title: '三遍跟读法：第2遍正式',
+                                description: '第2遍：不看原文！大声跟读，追求发音接近',
+                                guide: `
+                                    <h2>影子跟读三遍法 - 第2遍正式跟读</h2>
+                                    <div class="guide-step">
+                                        <h3>为什么第2遍不看原文？</h3>
+                                        <p>●这样才能练习"听到就反应"的能力</p>
+                                        <p>●考试时也是听，看不到原文</p>
+                                        <p>●这是最接近考试情景的训练</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>操作步骤</h3>
+                                        <ol>
+                                            <li>关闭原文（这是关键！）</li>
+                                            <li>播放音频</li>
+                                            <li>大声跟读（不是小声！）</li>
+                                            <li>追求：
+                                                <ul>
+                                                    <li>发音接近原音</li>
+                                                    <li>速度跟上原音</li>
+                                                    <li>语调模仿原音</li>
+                                                </ul>
+                                            </li>
+                                            <li>跟不上的词先听，继续往下说</li>
+                                            <li>完成一遍</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>常见错误（要避免）</h3>
+                                        <p>❌ 太小声 → 跟读是口语练习，必须大声</p>
+                                        <p>❌ 中途暂停 → 这样失去了"同速"的意义</p>
+                                        <p>❌ 放慢速度 → 不要调到0.8倍速，要原速</p>
+                                        <p>❌ 不停纠正 → 继续往下说，后续会改善</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>预期效果</h3>
+                                        <p>●第1遍：50%理解</p>
+                                        <p>●第2遍：能跟上70%，发音还有误</p>
+                                    </div>
+                                `
+                            },
+                            {
+                                title: '三遍跟读法：第3遍挑战',
+                                description: '第3遍：挑战自己，追求发音和速度都接近原音',
+                                guide: `
+                                    <h2>影子跟读三遍法 - 第3遍挑战</h2>
+                                    <div class="guide-step">
+                                        <h3>第3遍的目标</h3>
+                                        <p>●追求"高质量跟读"</p>
+                                        <p>●发音、语速、语调都要接近</p>
+                                        <p>●这是这段题目的"最终成果"</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>操作步骤</h3>
+                                        <ol>
+                                            <li>继续不看原文</li>
+                                            <li>播放音频（可考虑用0.9倍速，缓解难度）</li>
+                                            <li>这一遍重点是"质量"，比上一遍更精准</li>
+                                            <li>发音更清晰，语调更相似</li>
+                                            <li>完成一遍</li>
+                                        </ol>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>0.9倍速的说明</h3>
+                                        <p>●如果觉得特别困难，第3遍可以用0.9倍速</p>
+                                        <p>●给大脑一个缓冲，提升跟读质量</p>
+                                        <p>●后续会逐渐回到原速</p>
+                                    </div>
+                                    <div class="guide-step">
+                                        <h3>时间分配</h3>
+                                        <p>●三遍跟读总耗时：约15-20分钟</p>
+                                        <p>●剩余10-15分钟用来调整或再做一段</p>
+                                    </div>
+                                `
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // 周末任务特殊处理
+        const weekendTasks = {
+            period: '周六全天',
+            title: '⭐ 周六休息日任务',
+            duration: '70分钟',
+            tasks: [
+                {
+                    title: '📖 单词新学（维持日常量）',
+                    description: '上午任意时段完成当日新学任务',
+                    guide: `
+                        <h2>周六单词任务说明</h2>
+                        <div class="guide-step">
+                            <h3>周六的特殊性</h3>
+                            <p>●周六是休息日，但单词任务不能断</p>
+                            <p>●识日APP有"每日打卡"的要求</p>
+                            <p>●如果不完成，APP会影响你的学习链条</p>
+                        </div>
+                        <div class="guide-step">
+                            <h3>周六单词任务</h3>
+                            <ol>
+                                <li>上午选择任意时段（不用固定8:00）</li>
+                                <li>完成该日的新学词（50词或40词，取决于阶段）</li>
+                                <li>完成APP推送的复习</li>
+                                <li>总耗时约70分钟</li>
+                            </ol>
+                        </div>
+                        <div class="guide-step">
+                            <h3>周六不做的任务</h3>
+                            <p>●语法学习：周六不学新语法单元</p>
+                            <p>●阅读精读：周六不做阅读练习</p>
+                            <p>●听力精听：周六不做听力精听</p>
+                        </div>
+                        <div class="guide-step">
+                            <h3>周六怎么休息？</h3>
+                            <p>●做完单词后，就彻底放松</p>
+                            <p>●可以看看之前的错题本（可选）</p>
+                            <p>●可以轻松听日语音乐（可选）</p>
+                            <p>●但不强制做任何学习任务</p>
+                        </div>
+                    `
+                },
+                {
+                    title: '🔄 APP复习（当日触发）',
+                    description: '完成识日APP推送的复习词汇',
+                    guide: `
+                        <h2>周六APP复习</h2>
+                        <p>和平日相同，完成APP推送的复习任务即可。</p>
+                    `
+                }
+            ]
+        };
+
+        // 生成日程卡片
+        function generateSchedule(dateStr) {
+            const scheduleContainer = document.getElementById('scheduleContainer');
+            scheduleContainer.innerHTML = '';
+
+            const data = scheduleData[dateStr];
+            if (!data) {
+                scheduleContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;">此日期无计划数据</p>';
+                return;
+            }
+
+            const date = new Date(dateStr);
+            const dayOfWeek = date.getDay();
+            const isWeekend = dayOfWeek === 6; // 周六
+
+            let cardsToDisplay = data.cards;
+            if (isWeekend && data.cards.length === 0) {
+                cardsToDisplay = [weekendTasks];
+            }
+
+            cardsToDisplay.forEach((card, cardIndex) => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = `schedule-card ${isWeekend ? 'weekend' : ''}`;
+
+                const headerDiv = document.createElement('div');
+                headerDiv.className = `schedule-header ${data.cards.length > 0 ? '' : 'completed'}`;
+                headerDiv.textContent = `${card.period}`;
+                cardDiv.appendChild(headerDiv);
+
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'schedule-content';
+
+                // 添加标题
+                const titleDiv = document.createElement('h3');
+                titleDiv.style.color = '#667eea';
+                titleDiv.style.marginBottom = '15px';
+                titleDiv.textContent = card.title;
+                contentDiv.appendChild(titleDiv);
+
+                // 添加时长标签
+                const durationSpan = document.createElement('span');
+                durationSpan.className = 'task-duration';
+                durationSpan.textContent = card.duration;
+                contentDiv.appendChild(durationSpan);
+
+                contentDiv.appendChild(document.createElement('br'));
+
+                // 添加任务列表
+                card.tasks.forEach((task, taskIndex) => {
+                    const taskKey = `${dateStr}-${cardIndex}-${taskIndex}`;
+                    const isCompleted = getTaskStatus(taskKey);
+
+                    const taskItem = document.createElement('div');
+                    taskItem.className = `task-item ${isCompleted ? 'completed' : ''}`;
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.className = 'task-checkbox';
+                    checkbox.checked = isCompleted;
+                    checkbox.onchange = () => toggleTask(taskKey);
+
+                    const taskContent = document.createElement('div');
+                    taskContent.className = 'task-content';
+
+                    const taskTitle = document.createElement('div');
+                    taskTitle.className = 'task-title';
+                    taskTitle.textContent = task.title;
+
+                    const taskDesc = document.createElement('div');
+                    taskDesc.className = 'task-description';
+                    taskDesc.textContent = task.description;
+
+                    taskContent.appendChild(taskTitle);
+                    taskContent.appendChild(taskDesc);
+
+                    if (task.guide) {
+                        const guideBtn = document.createElement('button');
+                        guideBtn.className = 'guide-button';
+                        guideBtn.textContent = '📖 查看指南';
+                        guideBtn.onclick = () => showGuide(task.guide);
+                        taskContent.appendChild(guideBtn);
+                    }
+
+                    taskItem.appendChild(checkbox);
+                    taskItem.appendChild(taskContent);
+                    contentDiv.appendChild(taskItem);
+                });
+
+                cardDiv.appendChild(contentDiv);
+                scheduleContainer.appendChild(cardDiv);
+            });
+
+            updateStats(dateStr);
+        }
+
+        // 任务状态管理
+        function getTaskStatus(taskKey) {
+            const data = JSON.parse(localStorage.getItem('taskStatus') || '{}');
+            return data[taskKey] || false;
+        }
+
+        function toggleTask(taskKey) {
+            const data = JSON.parse(localStorage.getItem('taskStatus') || '{}');
+            data[taskKey] = !data[taskKey];
+            localStorage.setItem('taskStatus', JSON.stringify(data));
+            generateSchedule(currentDate);
+        }
+
+        function updateStats(dateStr) {
+            const data = JSON.parse(localStorage.getItem('taskStatus') || '{}');
+            const scheduleContainer = document.getElementById('scheduleContainer');
+            const checkboxes = scheduleContainer.querySelectorAll('.task-checkbox');
+            
+            const completed = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const total = checkboxes.length;
+
+            document.getElementById('completedTasks').textContent = completed;
+            document.getElementById('totalTasks').textContent = total;
+            document.getElementById('completionRate').textContent = total > 0 ? Math.round(completed / total * 100) + '%' : '0%';
+
+            // 更新进度条
+            document.getElementById('completedProgressFill').style.width = (total > 0 ? completed / total * 100 : 0) + '%';
+            document.getElementById('rateProgressFill').style.width = (total > 0 ? completed / total * 100 : 0) + '%';
+            document.getElementById('totalProgressFill').style.width = '100%';
+
+            // 今日摘要
+            document.getElementById('todayTotalTasks').textContent = total;
+            document.getElementById('todayCompletedTasks').textContent = completed;
+            document.getElementById('todayProgress').textContent = total > 0 ? Math.round(completed / total * 100) + '%' : '0%';
+
+            // 估算完成时间
+            if (total > 0) {
+                let totalMinutes = 0;
+                const scheduleData_temp = scheduleData[dateStr];
+                if (scheduleData_temp && scheduleData_temp.cards) {
+                    scheduleData_temp.cards.forEach(card => {
+                        const match = card.duration.match(/\d+/);
+                        if (match) {
+                            totalMinutes += parseInt(match[0]);
+                        }
+                    });
+                }
+                const hours = Math.floor(totalMinutes / 60);
+                const minutes = totalMinutes % 60;
+                document.getElementById('estimatedTime').textContent = `${hours}小时${minutes}分钟`;
+            }
+
+            // 连续完成天数
+            calculateConsecutiveDays();
+        }
+
+        function calculateConsecutiveDays() {
+            const data = JSON.parse(localStorage.getItem('taskStatus') || '{}');
+            let consecutiveDays = 0;
+            let checkDate = new Date(currentDate);
+
+            while (true) {
+                const dateStr = checkDate.toISOString().split('T')[0];
+                const scheduleInfo = scheduleData[dateStr];
+                
+                if (!scheduleInfo) break;
+
+                const taskKeys = [];
+                if (scheduleInfo.cards) {
+                    scheduleInfo.cards.forEach((card, cardIndex) => {
+                        card.tasks.forEach((task, taskIndex) => {
+                            taskKeys.push(`${dateStr}-${cardIndex}-${taskIndex}`);
+                        });
+                    });
+                }
+
+                // 检查该天是否全部完成
+                const allCompleted = taskKeys.length > 0 && taskKeys.every(key => data[key]);
+                if (!allCompleted && taskKeys.length > 0) break;
+
+                consecutiveDays++;
+                checkDate.setDate(checkDate.getDate() - 1);
+            }
+
+            document.getElementById('consecutiveDays').textContent = consecutiveDays;
+            document.getElementById('consecutiveProgressFill').style.width = Math.min(consecutiveDays / 81 * 100, 100) + '%';
+        }
+
+        // 指南弹窗
+        function showGuide(guideText) {
+            document.getElementById('guideText').innerHTML = guideText;
+            document.getElementById('guideModal').classList.add('show');
+        }
+
+        function closeGuide() {
+            document.getElementById('guideModal').classList.remove('show');
+        }
+
+        // 日期导航
+        let currentDate = new Date().toISOString().split('T')[0];
+
+        function previousDate() {
+            const date = new Date(currentDate);
+            date.setDate(date.getDate() - 1);
+            currentDate = date.toISOString().split('T')[0];
+            updateDateDisplay();
+            generateSchedule(currentDate);
+        }
+
+        function nextDate() {
+            const date = new Date(currentDate);
+            date.setDate(date.getDate() + 1);
+            currentDate = date.toISOString().split('T')[0];
+            updateDateDisplay();
+            generateSchedule(currentDate);
+        }
+
+        function selectDate() {
+            const selected = document.getElementById('dateSelector').value;
+            if (selected) {
+                currentDate = selected;
+                updateDateDisplay();
+                generateSchedule(currentDate);
+            }
+        }
+
+        function updateDateDisplay() {
+            document.getElementById('dateSelector').value = currentDate;
+            const date = new Date(currentDate);
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'long' };
+            document.getElementById('currentDateDisplay').textContent = date.toLocaleDateString('zh-CN', options);
+        }
+
+        function resetAll() {
+            if (confirm('确定要重置所有进度吗？此操作无法撤销！')) {
+                localStorage.removeItem('taskStatus');
+                generateSchedule(currentDate);
+            }
+        }
+
+        function exportData() {
+            const data = localStorage.getItem('taskStatus') || '{}';
+            const dataStr = JSON.stringify(JSON.parse(data), null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `N1备考数据-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        // 关闭弹窗
+        window.onclick = function(event) {
+            const modal = document.getElementById('guideModal');
+            if (event.target === modal) {
+                modal.classList.remove('show');
+            }
+        }
+
+        // 初始化
+        window.addEventListener('load', () => {
+            updateDateDisplay();
+            generateSchedule(currentDate);
+        });
+    </script>
+</body>
+</html>
