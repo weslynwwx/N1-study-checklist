@@ -487,24 +487,9 @@
 
 <script>
 (() => {
-  const TZ_OFFSET_HOURS = 8; // UTC+8
-const MS_HOUR = 60 * 60 * 1000;
-const addHours = (date, h) => new Date(date.getTime() + h * MS_HOUR);
-
-function toUTC8(date){
-  // 把某个“实际时间点”换算到 UTC+8 的视角，再用 UTC 方法取年月日/星期
-  return addHours(date, TZ_OFFSET_HOURS);
-}
-
-const fmt = (date) => {
-  const d = toUTC8(date);
-  const pad2 = n => String(n).padStart(2,'0');
-  return `${d.getUTCFullYear()}-${pad2(d.getUTCMonth()+1)}-${pad2(d.getUTCDate())}`;
-};
-
-const dayOfWeekCN = (date) => ['周日','周一','周二','周三','周四','周五','周六'][ toUTC8(date).getUTCDay() ];
-  const startDate = new Date(Date.UTC(2026, 8, 24, 0, 0, 0) - TZ_OFFSET_HOURS*MS_HOUR); // 2026-09-24 00:00 北京时间
-  const endDate   = new Date(Date.UTC(2026, 11, 6, 0, 0, 0) - TZ_OFFSET_HOURS*MS_HOUR); // 2026-12-06 00:00 北京时间
+  // ★★★ 修改点1：起始日期改为 2026-09-24 ★★★
+  const startDate = new Date('2026-09-24T00:00:00+09:00');
+  const endDate   = new Date('2026-12-06T00:00:00+09:00');
 
   const pad2 = n => String(n).padStart(2,'0');
   const fmt = (d) => `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
@@ -606,12 +591,9 @@ const dayOfWeekCN = (date) => ['周日','周一','周二','周三','周四','周
   const todayStr = fmt(new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0,0,0));
 
   const days = [];
-  const days = [];
-  const MS_DAY = 24 * 60 * 60 * 1000;
-
-  for (let cur = new Date(startDate.getTime()); cur <= endDate; cur = new Date(cur.getTime() + MS_DAY)) {
-  days.push(new Date(cur.getTime()));
-}
+  for (let d = cloneDate(startDate); d <= endDate; d.setDate(d.getDate()+1)){
+    days.push(cloneDate(d));
+  }
 
   let gPtr = 0;
 
