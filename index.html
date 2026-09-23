@@ -3,75 +3,83 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>JLPT N1每日学习清单（白底翻页版）</title>
+  <title>JLPT N1 每日学习清单（白底翻页版）</title>
   <style>
     :root{
-      --bg1:#f7f8ff;
+      --bg:#f5f7ff;
       --bg2:#ffffff;
-      --card:#ffffff;
-      --card2:#fbfbff;
       --text:#122036;
-      --muted:rgba(18,32,54,.66);
-      --line:rgba(18,32,54,.12);
-      --shadow: 0 18px 50px rgba(17,24,39,.10);
-      --radius:18px;
-      --radius2:14px;
+      --muted: rgba(18,32,54,.62);
+      --line: rgba(18,32,54,.12);
+      --shadow: 0 16px 42px rgba(17,24,39,.08);
+      --radius: 18px;
+      --radius2: 14px;
+
       --accent:#6c63ff;
       --accent2:#22c55e;
-
-      --danger:#ef4444;
-      --warn:#f59e0b;
       --blue:#3b82f6;
+      --danger:#ef4444;
+
+      --cardBg: rgba(255,255,255,.82);
     }
+
     *{ box-sizing:border-box; }
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB";
       color:var(--text);
       background:
-        radial-gradient(900px 420px at 10% 0%, rgba(108,99,255,.20), transparent 60%),
+        radial-gradient(900px 420px at 10% 0%, rgba(108,99,255,.22), transparent 60%),
         radial-gradient(720px 380px at 92% 10%, rgba(34,197,94,.12), transparent 55%),
-        linear-gradient(180deg, var(--bg1), var(--bg2));
-      padding:24px 14px 64px;
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      padding: 20px 14px 64px;
     }
-    .wrap{ max-width:1180px; margin:0 auto; }
+
+    .wrap{ max-width: 1180px; margin: 0 auto; }
 
     header{
       display:flex;
       gap:16px;
       align-items:flex-start;
       justify-content:space-between;
-      margin-bottom:14px;
       flex-wrap:wrap;
+      margin-bottom: 14px;
     }
+
     .title{
-      flex:1;
-      min-width:520px;
-      background: linear-gradient(180deg, rgba(108,99,255,.10), rgba(108,99,255,.03));
-      border:1px solid var(--line);
+      flex: 1;
+      min-width: 520px;
+      background: linear-gradient(180deg, rgba(108,99,255,.12), rgba(108,99,255,.03));
+      border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding:16px 16px 14px;
+      padding: 16px 16px 14px;
     }
-    .title h1{ margin:0; font-size:18px; font-weight:1000; letter-spacing:.2px; }
+    .title h1{
+      margin:0;
+      font-size: 18px;
+      font-weight: 1100;
+      letter-spacing: .2px;
+    }
     .title p{
-      margin:8px 0 0;
-      color:var(--muted);
-      line-height:1.6;
-      font-size:13px;
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+      font-weight: 850;
     }
+
     .spark{
       display:inline-flex;
       align-items:center;
       gap:10px;
-      margin-top:10px;
-      padding:10px 12px;
-      border-radius:999px;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
       background: rgba(108,99,255,.08);
-      border:1px solid rgba(108,99,255,.18);
-      font-weight:900;
-      color: rgba(18,32,54,.85);
-      width:fit-content;
+      border: 1px solid rgba(108,99,255,.18);
+      font-weight: 1100;
+      color: rgba(18,32,54,.86);
     }
     .spark i{
       width:10px; height:10px; border-radius:50%;
@@ -81,18 +89,18 @@
     }
 
     .stats{
-      width: 440px;
+      width: 420px;
       max-width: 100%;
       display:grid;
       grid-template-columns: repeat(3, minmax(120px, 1fr));
-      gap:12px;
+      gap: 12px;
     }
     .stat{
-      background: rgba(255,255,255,.78);
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: 0 16px 40px rgba(17,24,39,.06);
-      padding:12px 12px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid var(--line);
+      border-radius: var(--radius2);
+      box-shadow: 0 14px 40px rgba(17,24,39,.05);
+      padding: 12px 12px;
       position:relative;
       overflow:hidden;
     }
@@ -101,18 +109,30 @@
       position:absolute; inset:-2px;
       background:
         radial-gradient(420px 120px at 10% 0%, rgba(108,99,255,.14), transparent 55%),
-        radial-gradient(360px 120px at 90% 10%, rgba(34,197,94,.12), transparent 55%);
+        radial-gradient(360px 120px at 90% 10%, rgba(34,197,94,.10), transparent 55%);
       pointer-events:none;
+      opacity:.9;
     }
-    .stat .k{ position:relative; color:var(--muted); font-size:12px; font-weight:900; margin-bottom:6px; }
-    .stat .v{ position:relative; font-size:22px; font-weight:1100; letter-spacing:.2px; }
+    .stat .k{
+      position:relative;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 1000;
+      margin-bottom: 6px;
+    }
+    .stat .v{
+      position:relative;
+      font-size: 22px;
+      font-weight: 1150;
+      letter-spacing: .2px;
+    }
 
     .progressRow{
-      margin-top:14px;
-      padding:14px;
-      border:1px solid var(--line);
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(255,255,255,.72);
+      background: rgba(255,255,255,.80);
       box-shadow: 0 16px 44px rgba(17,24,39,.06);
     }
     .progressTop{
@@ -120,11 +140,12 @@
       align-items:center;
       justify-content:space-between;
       gap:10px;
-      margin-bottom:10px;
+      margin-bottom: 10px;
       flex-wrap:wrap;
     }
-    .progressTop .label{ color:var(--muted); font-size:12px; font-weight:950; }
-    .progressTop .value{ font-size:14px; font-weight:1000; }
+    .label{ color: var(--muted); font-size: 12px; font-weight: 1000; }
+    .value{ font-size: 14px; font-weight: 1150; }
+
     .bar{
       height:14px;
       border-radius: 999px;
@@ -137,29 +158,30 @@
       display:block;
       height:100%;
       width:0%;
-      background: linear-gradient(90deg, var(--accent), #44d7ff);
+      background: linear-gradient(90deg, var(--accent2), #44d7ff);
       border-radius: 999px;
       transition: width .25s ease;
     }
 
     .controls{
       display:flex;
-      align-items:center;
       gap:10px;
-      flex-wrap:wrap;
+      align-items:center;
       justify-content:flex-end;
+      flex-wrap:wrap;
     }
+
     button{
       cursor:pointer;
       border:none;
       border-radius: 12px;
       padding:10px 12px;
       background: rgba(18,32,54,.04);
-      color:var(--text);
+      color: var(--text);
       border: 1px solid rgba(18,32,54,.12);
       transition: transform .12s ease, background .12s ease;
-      font-weight:1000;
-      font-size:12px;
+      font-weight: 1100;
+      font-size: 12px;
       letter-spacing:.2px;
     }
     button:hover{ transform: translateY(-1px); background: rgba(18,32,54,.06); }
@@ -168,12 +190,13 @@
       border-color: rgba(239,68,68,.30);
       color:#9f1239;
     }
+
     .nav{
-      margin: 14px 0;
+      margin: 14px 0 14px;
       padding: 14px;
-      border:1px solid var(--line);
+      border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(255,255,255,.70);
+      background: rgba(255,255,255,.82);
       box-shadow: 0 16px 44px rgba(17,24,39,.05);
       display:flex;
       gap:12px;
@@ -182,22 +205,22 @@
       flex-wrap:wrap;
     }
     .nav .left{
-      display:flex; flex-direction:column; gap:4px;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      min-width: 280px;
     }
-    .nav .t1{ font-size:13px; font-weight:1000; }
-    .nav .t2{ font-size:12px; color:var(--muted); }
-    .nav .right{
-      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-      justify-content:flex-end;
-    }
+    .nav .t1{ font-size: 13px; font-weight: 1150; letter-spacing:.2px; }
+    .nav .t2{ font-size: 12px; color: var(--muted); font-weight: 950; line-height:1.35; }
+
     select, input[type="date"]{
-      background: rgba(255,255,255,.9);
+      background: rgba(255,255,255,.95);
       color: var(--text);
       border: 1px solid rgba(18,32,54,.14);
       border-radius: 12px;
       padding: 10px 12px;
       outline:none;
-      font-weight:1000;
+      font-weight: 1100;
     }
 
     .modePills{
@@ -205,44 +228,53 @@
       border:1px solid rgba(18,32,54,.12);
       border-radius:999px;
       overflow:hidden;
-      background: rgba(255,255,255,.85);
+      background: rgba(255,255,255,.88);
     }
     .modePills button{
       border-radius:0;
       border:none;
       background: transparent;
-      border-right:1px solid rgba(18,32,54,.10);
       box-shadow:none;
-      padding:10px 14px;
+      padding: 10px 14px;
+      border-right:1px solid rgba(18,32,54,.10);
+      font-weight: 1100;
     }
     .modePills button:last-child{ border-right:none; }
     .modePills button.active{
-      background: linear-gradient(180deg, rgba(108,99,255,.20), rgba(108,99,255,.08));
+      background: linear-gradient(180deg, rgba(108,99,255,.22), rgba(108,99,255,.10));
       color: var(--accent);
     }
 
     .weekHeader{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
       margin: 10px 0 14px;
       flex-wrap:wrap;
     }
     .weekHeader .whLeft{
-      display:flex; flex-direction:column; gap:4px;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
     }
-    .weekHeader .rangeTitle{
-      font-weight:1100;
-      letter-spacing:.2px;
+    .rangeTitle{
+      font-weight: 1200;
+      letter-spacing: .2px;
     }
-    .weekHeader .rangeSub{
-      color:var(--muted); font-size:12px; font-weight:900;
+    .rangeSub{
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 950;
       line-height:1.35;
     }
+    .tiny{ color: var(--muted); font-size: 12px; font-weight: 1000; }
 
     .dayList{ display:flex; flex-direction:column; gap:14px; }
 
     .dayCard{
       border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.76));
+      background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.80));
       border: 1px solid rgba(18,32,54,.10);
       box-shadow: var(--shadow);
       overflow:hidden;
@@ -263,12 +295,11 @@
       gap:6px;
       min-width: 320px;
     }
-    .dateRow{
-      display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
-    }
+
+    .dateRow{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
     .date{
       font-size: 15px;
-      font-weight: 1100;
+      font-weight: 1150;
       letter-spacing:.2px;
     }
     .pill{
@@ -278,18 +309,19 @@
       border: 1px solid rgba(108,99,255,.25);
       padding: 4px 10px;
       border-radius: 999px;
-      font-weight: 1000;
+      font-weight: 1100;
     }
     .sub{
       font-size:12px;
       color: var(--muted);
       line-height:1.35;
-      font-weight:900;
+      font-weight: 950;
     }
     .right{
-      display:flex; flex-direction:column; gap:8px; align-items:flex-end; min-width: 210px;
+      display:flex; flex-direction:column; gap:8px;
+      align-items:flex-end;
+      min-width: 220px;
     }
-    .tiny{ color:var(--muted); font-size:12px; font-weight:1000; }
     .dayProgress{ width:190px; max-width:100%; }
     .dayProgress .bar{
       height: 12px;
@@ -313,21 +345,22 @@
     }
 
     .task{
-      background: rgba(255,255,255,.85);
+      background: rgba(255,255,255,.88);
       border: 1px solid rgba(18,32,54,.10);
       border-radius: var(--radius2);
       padding: 12px;
       position:relative;
       overflow:hidden;
+      box-shadow: 0 10px 28px rgba(17,24,39,.04);
     }
     .task:before{
       content:"";
       position:absolute; inset:-2px;
       background:
         radial-gradient(420px 120px at 10% 0%, rgba(108,99,255,.10), transparent 55%),
-        radial-gradient(360px 120px at 90% 10%, rgba(34,197,94,.09), transparent 55%);
+        radial-gradient(360px 120px at 90% 10%, rgba(34,197,94,.08), transparent 55%);
       pointer-events:none;
-      opacity:.85;
+      opacity:.9;
     }
     .taskInner{ position:relative; }
 
@@ -335,37 +368,36 @@
       width:18px; height:18px;
       accent-color: var(--accent2);
       transform: translateY(2px);
-      margin-right:10px;
+      margin-right: 10px;
     }
+
     .taskTop{
       display:flex;
       align-items:flex-start;
-      gap:10px;
       justify-content:space-between;
+      gap:10px;
     }
     .tTitle{
-      font-size:13px;
-      font-weight:1100;
+      font-size: 13px;
+      font-weight: 1150;
       line-height:1.3;
-      margin-bottom:6px;
+      margin-bottom: 6px;
     }
     .tMeta{
-      font-size:12px;
+      font-size: 12px;
       color: var(--muted);
-      line-height:1.4;
+      line-height:1.45;
       margin:0 0 10px;
-      font-weight:900;
+      font-weight: 950;
     }
 
-    details{
-      position:relative;
-    }
+    details{ position:relative; }
     summary{
       list-style:none;
       cursor:pointer;
       user-select:none;
-      font-weight:1000;
-      font-size:12px;
+      font-weight: 1100;
+      font-size: 12px;
       color: rgba(18,32,54,.78);
       padding: 6px 10px;
       border-radius: 999px;
@@ -376,12 +408,13 @@
       gap:8px;
     }
     summary::-webkit-details-marker{ display:none; }
+
     .detail{
       margin-top: 8px;
       padding: 10px 12px;
       border-radius: 12px;
       border: 1px dashed rgba(18,32,54,.18);
-      background: rgba(0,0,0,.03);
+      background: rgba(0,0,0,.02);
       font-size:12.5px;
       line-height:1.55;
       color: rgba(18,32,54,.90);
@@ -389,16 +422,28 @@
     .detail ul{ margin:0; padding-left:18px; }
     .detail li{ margin: 4px 0; }
 
+    .emptyHint{
+      grid-column: 1 / -1;
+      padding: 16px;
+      text-align:center;
+      color: var(--muted);
+      font-weight: 1100;
+      border: 1px dashed rgba(18,32,54,.18);
+      border-radius: var(--radius2);
+      background: rgba(255,255,255,.7);
+    }
+
     .foot{
       margin-top:18px;
       padding: 14px;
       border:1px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(255,255,255,.70);
+      background: rgba(255,255,255,.82);
       color: var(--muted);
       font-size:12px;
       line-height:1.7;
       box-shadow: 0 16px 40px rgba(17,24,39,.05);
+      font-weight: 950;
     }
     .badge{
       display:inline-flex;
@@ -408,54 +453,30 @@
       border-radius: 999px;
       border: 1px solid rgba(108,99,255,.20);
       background: rgba(108,99,255,.10);
-      font-weight:1000;
+      font-weight:1100;
       color: rgba(18,32,54,.86);
+      margin-bottom: 8px;
     }
     .dot{
       width:10px; height:10px; border-radius:50%;
       background: var(--accent2);
       box-shadow: 0 0 0 4px rgba(34,197,94,.12);
     }
-
-    .emptyHint{
-      padding:16px;
-      text-align:center;
-      color:var(--muted);
-      font-weight:1000;
-      border:1px dashed rgba(18,32,54,.18);
-      border-radius: var(--radius2);
-      background: rgba(255,255,255,.6);
-    }
-
-    .stickyTip{
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-      padding: 10px 12px;
-      border-radius: var(--radius);
-      border: 1px solid rgba(59,130,246,.18);
-      background: rgba(59,130,246,.08);
-      color: rgba(18,32,54,.90);
-      font-weight:950;
-      font-size:12px;
-      line-height:1.45;
-      margin-top:12px;
-    }
-    .stickyTip b{ color: rgba(18,32,54,.98); }
   </style>
 </head>
 <body>
 <div class="wrap">
   <header>
     <div class="title">
-      <h1>JLPT N1 每日学习清单（打钩版 + 翻页）</h1>
+      <h1>JLPT N1 每日学习清单（白底翻页版）</h1>
       <p>
-        你只需要每天照着网页勾 ✅ 即可。勾选会保存在浏览器本地（localStorage）。<br/>
-        <span style="color:rgba(18,32,54,.86);font-weight:1000;">
-          规则已对齐你的要求：周一/三/五 14:00-17:00 语法专项课；周六 13:00 前不学习；周日仍学习；每天必须背单词APP；阅读生词导入自定义词书；听力生词第二天听写。
-        </span>
+        这是<strong>可翻页</strong>的打钩清单：只显示<strong>当天或一周</strong>，不会把全部计划塞在同一页。<br/>
+        勾选会保存在浏览器本地（localStorage），用于统计完成度与连续完成天数。
       </p>
-      <div class="spark"><i></i>打钩即完成 · 自动统计进度与连续完成天数</div>
+      <div class="spark"><i></i>只需每天照着网页打钩 ✅</div>
+      <p>
+        规则已对齐你的要求：周一/三/五 14:00-17:00 语法专项课；周六 13:00 前不学习；周日仍学习；每天必须背单词APP；阅读生词导入自定义词书；听力生词明天听写。
+      </p>
     </div>
 
     <div class="stats">
@@ -481,8 +502,8 @@
         <div class="value" id="overallText">-</div>
       </div>
       <div class="controls">
-        <button id="scrollTodayBtn">跳到今天</button>
-        <button class="danger" id="resetBtn" title="清空本网页在本地的勾选记录">清空打钩记录</button>
+        <button id="scrollTodayBtn" type="button">跳到今天</button>
+        <button class="danger" id="resetBtn" type="button" title="清空本网页在本地的勾选记录">清空打钩记录</button>
       </div>
     </div>
     <div class="bar" aria-label="overall progress"><i id="overallBar"></i></div>
@@ -490,10 +511,11 @@
 
   <div class="nav">
     <div class="left">
-      <div class="t1">翻页切换 · 单日/一周视图</div>
-      <div class="t2">建议：先用“一周视图”确保节奏，再用“单日视图”逐天精确执行</div>
+      <div class="t1">翻页切换 · 单日 / 一周视图</div>
+      <div class="t2">建议：一周视图先把节奏看懂，再用单日视图按天精准执行。</div>
     </div>
-    <div class="right">
+
+    <div class="controls">
       <div class="modePills" role="group" aria-label="view mode">
         <button id="modeWeekBtn" class="active" type="button">一周</button>
         <button id="modeDayBtn" type="button">单日</button>
@@ -517,37 +539,37 @@
   <div class="dayList" id="dayList"></div>
 
   <div class="foot">
-    <div class="badge"><span class="dot"></span>你只要记得两件事</div>
-    <div style="margin-top:10px;">
-      1）<b>听写</b>：每天 10:00-10:15 用“昨天听写清单”做纠错；今天听力结束后把新听不清词追加到“明天听写清单”。<br/>
-      2）<b>阅读生词</b>：不认识→直接加入 APP 自定义词书；命中《绿宝书N1必考词》→优先复习；否则→阅读补充复习。<br/>
-      （语法专项课日以“课堂笔记→接续/含义口述→下方语法自测”闭环执行）
+    <div class="badge"><span class="dot"></span>每天只记得两件事</div>
+    <div>
+      1）<b>听写</b>：每天 10:00-10:15 用“昨天听写清单”做纠错；听力结束后把新听不清词追加到“明天听写清单”。<br/>
+      2）<b>阅读生词</b>：不认识→加入 APP 自定义词书；命中《绿宝书N1必考词》→优先复习；否则→阅读补充复习。<br/>
+      语法专项课日按“课堂笔记→接续/含义口述→下方语法自测”闭环执行。
     </div>
   </div>
 </div>
 
 <script>
 (() => {
-  // ====== 日期范围：按你要的连续计划（可根据需要继续扩展） ======
+  // ---------------- 日期范围 ----------------
   const startDate = new Date('2026-10-12T00:00:00+09:00');
   const endDate   = new Date('2026-12-06T00:00:00+09:00');
 
   const pad2 = n => String(n).padStart(2,'0');
   const fmt = (d) => `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
   const cloneDate = d => new Date(d.getTime());
-
   const dayOfWeekCN = (dow) => ['周日','周一','周二','周三','周四','周五','周六'][dow];
 
-  // 语法专项课：周一/三/五 14:00-17:00
+  const days = [];
+  for (let d = cloneDate(startDate); d <= endDate; d.setDate(d.getDate()+1)) days.push(cloneDate(d));
+
+  // ---------------- 规则函数 ----------------
   const isLectureDay = (d) => {
     const dow = d.getDay(); //0 Sun
     return dow === 1 || dow === 3 || dow === 5; // Mon/Wed/Fri
   };
-
-  // 周六13:00前不学习；我们在生成任务时只生成 13:00 后
   const isSaturday = (d) => d.getDay() === 6;
 
-  // 词汇目标（用于网页提示；APP最终以你的推送为准）
+  // 词汇新学目标（其余天默认新学0，只复习）
   const newTargets = {
     '2026-10-12':75,'2026-10-13':75,'2026-10-14':75,'2026-10-15':75,'2026-10-16':75,
     '2026-10-17':70,'2026-10-18':70,'2026-10-19':70,'2026-10-20':70,'2026-10-21':70,
@@ -555,18 +577,16 @@
     '2026-10-27':65,'2026-10-28':65,'2026-10-29':65,'2026-10-30':65,'2026-10-31':65
   };
 
-  // 听力真题集合
   const listeningSets = [
     '2017/07','2017/12','2018/07','2018/12','2019/07','2019/12','2020/12',
     '2021/07','2021/12','2022/07','2022/12','2023/07','2023/12',
     '2024/07','2024/12','2025/07','2025/12'
   ];
 
-  // 阅读真题分段（与前一版生成逻辑保持一致）
-  const readingSetsShort = ['2022/07','2022/12','2023/07','2023/12','2024/07','2024/12','2025/07']; // 短篇
-  const readingSetsMid   = ['2025/12','2025/07','2024/12','2024/07','2023/12','2023/07'];          // 中篇
-  const readingSetsLong  = ['2025/12','2024/12','2023/12','2022/12','2025/07','2024/07','2023/07']; // 长篇/对比/信息查找
-
+  // 阅读分段（按天索引滚动）
+  const readingSetsShort = ['2022/07','2022/12','2023/07','2023/12','2024/07','2024/12','2025/07'];
+  const readingSetsMid   = ['2025/12','2025/07','2024/12','2024/07','2023/12','2023/07'];
+  const readingSetsLong  = ['2025/12','2024/12','2023/12','2022/12','2025/07','2024/07','2023/07'];
   const longQCycle = ['问题10（长篇）','问题11（ab对比）','问题12（长篇）','问题13（信息查找）'];
 
   function getReadingForDay(dayIndex){
@@ -590,414 +610,330 @@
   }
 
   function getListeningForDay(dayIndex){
-    const setIdx = Math.floor(dayIndex/2) % listeningSets.length;
-    const set = listeningSets[setIdx];
-    const isFront = (dayIndex % 2 === 0);
+    const set = listeningSets[Math.floor(dayIndex/2) % listeningSets.length];
+    const front = (dayIndex % 2 === 0);
     return {
       set,
-      q: isFront ? '听力（问题1-4，前半）' : '听力（问题5-8，后半）'
+      q: front ? '听力（问题1-4，前半）' : '听力（问题5-8，后半）'
     };
   }
 
+  // ---------------- 语法：20单元x3轮（60个槽） ----------------
+  const grammarQueue = [];
+  for (let r=0;r<3;r++){
+    for (let u=1;u<=20;u++) grammarQueue.push(u);
+  }
   function grammarRoundLabel(posInQueue){
     if (posInQueue < 20) return '第1轮（学习：接续/含义/例句可复述）';
     if (posInQueue < 40) return '第2轮（复习：接续+差别点+语法自测）';
     return '第3轮（强化：弱项回炉）';
   }
-
-  // 三轮语法主队列（20 Unit）
-  const grammarQueue = [];
-  for (let r=0;r<3;r++){
-    for (let u=1;u<=20;u++) grammarQueue.push(u);
+  let grammarPtr = 0;
+  function getGrammarUnitSlot(){
+    if (grammarPtr >= grammarQueue.length){
+      return { unit: null, round: '语法回炉（以错因卡片为主：每天至少背5条接续差别）', pos: grammarPtr };
+    }
+    const unit = grammarQueue[grammarPtr];
+    const pos = grammarPtr;
+    grammarPtr += 1;
+    return { unit, round: grammarRoundLabel(pos), pos };
   }
 
-  const stateKey = 'n1_daily_check_v2_10_12_to_12_06';
-  const loadState = () => {
+  // ---------------- 最后几天：模拟/回炉（只改提示，不改结构） ----------------
+  const mockOverrides = new Set(['2026-12-01','2026-12-03','2026-12-04','2026-12-05']);
+
+  // ---------------- 本地状态 ----------------
+  const stateKey = 'n1_daily_check_v3_working';
+  const state = (() => {
     try{
       const raw = localStorage.getItem(stateKey);
       if(!raw) return { task: {} };
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object') return { task: {} };
+      if (!parsed.task) parsed.task = {};
+      return parsed;
     }catch(e){
       return { task: {} };
     }
-  };
-  const saveState = (s) => localStorage.setItem(stateKey, JSON.stringify(s));
+  })();
+  function saveState(){ localStorage.setItem(stateKey, JSON.stringify(state)); }
 
-  const state = loadState();
-
-  // ====== 生成：把每一天的“任务清单数据”预先算好（用于统计/渲染分页） ======
-  const days = [];
-  for (let d = cloneDate(startDate); d <= endDate; d.setDate(d.getDate()+1)){
-    days.push(cloneDate(d));
-  }
-
-  // 最后几天做“模拟/回炉”覆盖
-  const mockOverrides = new Set(['2026-12-01','2026-12-03','2026-12-04','2026-12-05']);
-
-  let gPtr = 0; // 主语法队列指针
-  function getGrammarUnit(){
-    const unit = grammarQueue[gPtr] ?? null;
-    const round = (unit ? grammarRoundLabel(gPtr) : '语法轮次已覆盖完成');
-    gPtr = Math.min(gPtr + 1, grammarQueue.length);
-    return { unit, round, pos: gPtr-1 };
-  }
-
-  const dayPlans = []; // { key, label, pill, tasks:[...], dayTaskIds:[] }
-
+  // ---------------- 生成全天计划数据（一次生成，渲染分页时复用） ----------------
+  const dayPlans = [];
   for (let idx=0; idx<days.length; idx++){
     const d = days[idx];
     const key = fmt(d);
     const dow = d.getDay();
-    const dayLabel = dayOfWeekCN(dow);
-    const lecture = isLectureDay(d);
-    const saturday = isSaturday(d);
+    const label = dayOfWeekCN(dow);
 
-    // 语法单元：主 +（语法课日可选）补复盘语法
-    const main = getGrammarUnit();
-    let extra = null;
-    if (lecture){
-      // 语法课日额外给一段 17:00-17:30 的语法/复盘（保证三轮闭环的可执行性）
-      if (gPtr < grammarQueue.length){
-        const x = { unit: grammarQueue[gPtr], round: grammarRoundLabel(gPtr), pos: gPtr };
-        gPtr = Math.min(gPtr + 1, grammarQueue.length);
-        extra = x;
-      }
-    }
+    const saturday = isSaturday(d);
+    const lecture = isLectureDay(d);
+    const examDay = (key === '2026-12-06');
 
     const reading = getReadingForDay(idx);
     const listening = getListeningForDay(idx);
-    const inNewPhase = (key <= '2026-10-31');
-    const newTarget = newTargets[key] ?? 0;
 
-    const tasks = [];
+    // 词汇新学
+    const target = newTargets[key] ?? 0;
+    const inNewPhase = target > 0;
 
-    const canMorning = !saturday;
+    let tasks = [];
+    let dayTaskIds = [];
 
-    // 考试日无任务（仅展示最后检查卡）
-    if (key === '2026-12-06'){
+    if (examDay){
       tasks.push({
         taskId: null,
-        timeText:'考前｜最后检查与心态',
-        title:'2分钟：错因/耳朵记忆/准考证文件检查',
-        metaText:'不新增任务；回忆激活 + 确认用品',
-        detailsBullets:[
-          '浏览听写清单中最难的 10 个词（不写，只读）',
-          '快速口头复述语法大纲里你最弱的 5 条接续差别',
-          '检查：准考证/身份证/笔/橡皮/计时表/水'
+        timeText: '考前｜最后检查与心态',
+        title: '2分钟：错因/耳朵记忆/文件用品检查',
+        metaText: '不新增任务；只做回忆激活 + 确认用品',
+        detailsBullets: [
+          '浏览你听写清单中最难的10个词（不写，只读）',
+          '快速口头复述语法大纲中你最弱的5条接续差别',
+          '检查：准考证/身份证/笔/橡皮/计时用表/水'
         ]
       });
-
       dayPlans.push({
-        key, label: dayLabel,
+        key, label,
         pill: '考试日',
-        reading, listening, mainUnit: main.unit,
-        tasks, dayTaskIds: []
+        reading, listening,
+        mainUnit: null,
+        tasks,
+        dayTaskIds
       });
       continue;
     }
 
-    // 10:00听写：周六13:00前不生成任务
+    // 是否需要上午（周六13:00前不学习）
+    const canMorning = !saturday;
+
+    // 语法：课日两槽（14-17上课 + 17-17:30补复盘）
+    let classUnit = null, classRound = null, extraUnit = null, extraRound = null;
+    if (lecture){
+      const a = getGrammarUnitSlot();
+      classUnit = a.unit; classRound = a.round;
+
+      const b = getGrammarUnitSlot();
+      extraUnit = b.unit; extraRound = b.round;
+    } else {
+      const a = getGrammarUnitSlot();
+      classUnit = null;
+      extraUnit = a.unit;
+      extraRound = a.round;
+    }
+
+    // --- 任务构建（每个时间块一个勾选项） ---
     if (canMorning){
-      const tidDict = `t_${key}_dictation`;
+      // 10:00-10:15 听写
       tasks.push({
-        taskId: tidDict,
-        timeText:'10:00-10:15',
-        title:'听写（昨天清单）',
-        metaText:'目的：纠正读音/词形，让听力“听得懂”',
-        detailsBullets:[
-          `使用“听写清单_${days[Math.max(0, idx-1)].toISOString().slice(0,10).replace('T','') }（昨天）”（按你本地备忘录实际命名）`,
-          '按清单逐词写：假名/汉字/简写均可，但发音要准确',
-          '纠错：错因标注为“读音/词义/词形”，并追加到“明天听写清单（若今天新增）”'
+        taskId: `t_${key}_dictation`,
+        timeText: '10:00-10:15',
+        title: '听写（用昨天听写清单）',
+        metaText: '目的：纠正读音/词形，让听力更“听得懂”',
+        detailsBullets: [
+          `使用“听写清单（${days[Math.max(0, idx-1)] ? fmt(days[Math.max(0, idx-1)]) : '昨天'}）”（按你本地备忘录命名为准）`,
+          '逐词听写：假名/汉字/简写均可，但发音要准确',
+          '纠错：错因标注（读音/词义/词形），并把“今天新增不会的”追加到明天听写清单'
         ]
       });
 
-      const tidVocab = `t_${key}_vocab`;
+      // 10:15-11:45 APP背单词
       tasks.push({
-        taskId: tidVocab,
-        timeText:'10:15-11:45（APP）',
-        title:'背单词：绿宝书N1必考词',
-        metaText: `${inNewPhase ? `新学目标：≥${newTarget}词/天（以APP推送为准）` : '新学：0（只复习）'}｜复习：尽量刷满APP复习栏上限（默认100/天）`,
-        detailsBullets:[
-          'APP内选择《绿宝书N1必考词》词书（无需手动导入）',
-          '完成“新学”后立刻刷复习栏（不够就延后补复习，不要跳过复习）',
-          '把当天错词/卡词记录到离线笔记，用于 11:45 的离线巩固'
+        taskId: `t_${key}_vocab_app`,
+        timeText: '10:15-11:45（APP）',
+        title: '背单词：绿宝书N1必考词',
+        metaText: `新学目标：${inNewPhase ? `≥${target}词/天（以APP推送为准）` : '0（只复习）'}｜复习：尽量刷满“复习栏100/天”`,
+        detailsBullets: [
+          'APP内直接打开《绿宝书N1必考词》词书背诵（无需手动上传）',
+          '完成“新学”后立刻刷复习栏（不跳过复习，保证闭环）',
+          '把当天“错词/卡词”记录在离线笔记（用于11:45的离线巩固）'
         ]
       });
 
-      const tidOff = `t_${key}_offline`;
+      // 11:45-12:00 离线巩固
       tasks.push({
-        taskId: tidOff,
-        timeText:'11:45-12:00',
-        title:'离线巩固（错词/用法激活）',
-        metaText:'目的：把当天词“说出来/写出来”，减少遗忘',
-        detailsBullets:[
-          '从APP当天错词/卡词抽10个：逐个说出日中释义',
+        taskId: `t_${key}_vocab_offline`,
+        timeText: '11:45-12:00',
+        title: '离线巩固（错词/用法激活）',
+        metaText: '把当天词“说出来/写出来”，减少遗忘曲线下滑',
+        detailsBullets: [
+          '从APP错词/卡词抽10个：逐个说出日中释义',
           '挑5个做30秒快速默写（写词形：假名/汉字/连词记号）',
-          '用其中2个词，口头各造1句（结合你后续要用的语法点）'
+          '再选2个词口头造句（结合你当天语法重点：口头即可）'
         ]
       });
     }
 
-    // 周六：只在 13:00 后学习
-    if (saturday){
-      tasks.push({
-        taskId: `t_${key}_read_sat1`,
-        timeText:'13:00-14:00',
-        title:'阅读精读（按阶段完成指定题）',
-        metaText:`${reading.set}｜${reading.q}`,
-        detailsBullets:[
-          '打开对应真题阅读：先做指定题（短篇：12min/篇；中篇：25min/篇；长篇/信息按参考）',
-          '只精读你选错/犹豫的句子：指代、转折、因果、语气',
-          '不认识的生词：加入APP自定义词书（命中绿宝书→优先复习；否则→阅读补充复习）
-          '
-        ]
-      });
-      tasks.push({
-        taskId: `t_${key}_read_sat2`,
-        timeText:'14:00-15:00',
-        title:'阅读错因二次精读（把“不会点”补上）',
-        metaText:'目的：阅读准确度（错因回填到语法/词汇）',
-        detailsBullets:[
-          '回到原文：把错题相关段落逐句读懂（至少2-3段）',
-          '用语法大纲回填：标出本篇涉及的语法点（先标记，不硬背）',
-          '把本篇最多2个“最可能考的语法/搭配”写入离线“阅读错因卡”'
-        ]
-      });
-      tasks.push({
-        taskId: `t_${key}_listen_sat`,
-        timeText:'15:30-16:15',
-        title:'听力：指定半段（原速+二刷错段）',
-        metaText:`${listening.set}｜${listening.q}`,
-        detailsBullets:[
-          '原速完成指定半段一遍做题',
-          '二刷：只重听错题对应音段2-3遍，并把听不清关键词加入听写清单',
-          '跟读：挑1个你最错的句子模仿语调（3遍）'
-        ]
-      });
-      tasks.push({
-        taskId: `t_${key}_grammar_sat`,
-        timeText:'16:15-17:30',
-        title:'语法自学/背诵（Unit）',
-        metaText: main.unit ? `Unit${main.unit}｜${main.round}` : '语法补复盘',
-        detailsBullets:[
-          '按语法大纲：接续→含义→例句中文意思→口头复述',
-          '背诵：至少把“接续关键词+含义”连续说出来（不追求全文）',
-          '检验：用当天对应语法相关题做12min自检并回填错因'
-        ]
-      });
-
-      dayPlans.push({
-        key, label: dayLabel, pill: '周六（仅13:00后）',
-        reading, listening, mainUnit: main.unit,
-        tasks, dayTaskIds: tasks.map(t=>t.taskId).filter(Boolean)
-      });
-      continue;
-    }
-
-    // 非周六
-    const isSunday = dow === 0;
-
-    if (isSunday){
-      // 语言知识计时：问题1-6（词汇+语法+排序+完型）
-      tasks.push({
-        taskId: `t_${key}_lang_sun`,
-        timeText:'13:00-14:00',
-        title:'语言知识计时冲刺（问题1-6）',
-        metaText:`真题年份循环：${listening.set}｜词汇/语法/排序/完型（按参考用时）`,
-        detailsBullets:[
-          '词汇题：6min（越快越好）',
-          '语法题：12min；排序：5min；完型：10min',
-          '对完只记录错因Top3（接续/含义/搭配/语感）并标回语法大纲对应Unit'
-        ]
-      });
-
-      // 阅读（14-15）
-      tasks.push({
-        taskId: `t_${key}_readA`,
-        timeText:'14:00-15:00',
-        title:'阅读精读：完成指定题（做题+定位错因）',
-        metaText:`${reading.set}｜${reading.q}`,
-        detailsBullets:[
-          '严格按题型参考用时完成指定部分',
-          '精读你错的句子：找指代、转折、因果、语气',
-          '不认识的生词→加入APP自定义词书（A命中绿宝书优先复习/B阅读补充复习）'
-        ]
-      });
-
-      // 听力（15:30-16:15）
-      tasks.push({
-        taskId: `t_${key}_listen_norm`,
-        timeText:'15:30-16:15',
-        title:'听力：指定半段（原速+二刷错段）',
-        metaText:`${listening.set}｜${listening.q}`,
-        detailsBullets:[
-          '完成指定半段一遍做题',
-          '二刷：只重听错题对应音段2-3遍，追加听写清单',
-          '跟读：挑1个最错句子模仿语调（3遍）'
-        ]
-      });
-
-      // 语法（16:15-17:30）
-      tasks.push({
-        taskId: `t_${key}_grammar_norm`,
-        timeText:'16:15-17:30',
-        title:'语法自学/复习/强化（Unit）',
-        metaText: main.unit ? `Unit${main.unit}｜${main.round}` : '语法补复盘',
-        detailsBullets:[
-          '学习/复习按轮次：接续→含义→例句中文意思→口头复述',
-          '背诵：至少背出“接续关键词+含义”连续2遍',
-          '检验：用当天语法相关题做12min自检并回填错因'
-        ]
-      });
-
-      dayPlans.push({
-        key, label: dayLabel, pill:'学习日',
-        reading, listening, mainUnit: main.unit,
-        tasks, dayTaskIds: tasks.map(t=>t.taskId).filter(Boolean)
-      });
-      continue;
-    }
+    // 星期日：13-14语言知识计时；其它：13-14阅读
+    const isSunday = (dow === 0);
 
     if (lecture){
-      // 课前预留：我们在 13:00 只安排听力；14-17 语法专项课；17-17:30 补复盘
+      // 13:00-14:00 听力（二刷错段）
       tasks.push({
-        taskId: `t_${key}_listen_lec`,
-        timeText:'13:00-14:00',
-        title:'听力：指定半段二刷为主',
-        metaText:`${listening.set}｜${listening.q}`,
-        detailsBullets:[
-          '完成指定半段一遍做题',
-          '二刷：只重听错题对应音段2-3遍，并把听不清词追加到听写清单',
+        taskId: `t_${key}_listen`,
+        timeText: '13:00-14:00',
+        title: '听力：指定半段（原速+二刷错段）',
+        metaText: `${listening.set}｜${listening.q}`,
+        detailsBullets: [
+          '原速做指定半段一遍',
+          '二刷：只重听错题对应音段2-3遍，把听不清的词追加到“明天听写清单”',
+          '最后跟读：挑1个你最错句子模仿语调（3遍）'
+        ]
+      });
+
+      // 14:00-17:00 语法专项课
+      tasks.push({
+        taskId: `t_${key}_grammar_lecture`,
+        timeText: '14:00-17:00',
+        title: `语法专项课：Unit${classUnit}（课堂笔记→口述巩固）`,
+        metaText: classRound,
+        detailsBullets: [
+          '课堂笔记：每条只写“接续关键词 + 含义一句话 + 对比点”',
+          '当场复述：每条语法你用自己的话解释一遍',
+          '课后最后10分钟：把本节“接续关键词+含义”连说2轮'
+        ]
+      });
+
+      // 17:00-17:30 补复盘/错因口述
+      tasks.push({
+        taskId: `t_${key}_grammar_extra`,
+        timeText: '17:00-17:30',
+        title: extraUnit ? `补复盘语法：Unit${extraUnit}` : '语法回炉：按错因卡片背诵',
+        metaText: extraRound,
+        detailsBullets: [
+          '只做闭环：接续→含义→例句中文意思→口头复述1遍',
+          '再用当天阅读中错因相关的2个句型做“口头纠错”（为什么错/正确是什么）',
+          '把最弱点1条写入“错因卡片”（明天优先背）'
+        ]
+      });
+
+    } else if (isSunday){
+      // 13:00-14:00 语言知识计时（问题1-6）
+      tasks.push({
+        taskId: `t_${key}_lang_sun`,
+        timeText: '13:00-14:00',
+        title: `语言知识计时：${idx % 2 === 0 ? listening.set : listening.set}（问题1-6）`,
+        metaText: '词汇6min + 语法12min + 排序5min + 完型10min（约33min）',
+        detailsBullets: [
+          '严格计时完成：词汇题6min→语法题12min→排序5min→完型10min',
+          '只记录Top3错因：接续/含义/搭配/语感（回填到语法大纲对应Unit）',
+          '最后2分钟：随机口头说出一条正确选项背后的“规则点”'
+        ]
+      });
+
+      // 14:00-15:00 阅读精读（短篇/中篇滚动）
+      tasks.push({
+        taskId: `t_${key}_readA`,
+        timeText: '14:00-15:00',
+        title: `阅读精读：${reading.set}｜${reading.q}`,
+        metaText: '目标：计时做题 + 精读错因',
+        detailsBullets: [
+          '按参考用时完成指定部分（短篇按12min/篇，问题8短篇对应短篇）',
+          '只精读你错选/犹豫的句子：指代/转折/因果/语气',
+          '生词：不认识→加入APP自定义词书（命中绿宝书→优先复习；否则→阅读补充复习）'
+        ]
+      });
+
+      // 15:30-16:15 听力
+      tasks.push({
+        taskId: `t_${key}_listen`,
+        timeText: '15:30-16:15',
+        title: `听力：指定半段（原速+二刷错段）`,
+        metaText: `${listening.set}｜${listening.q}`,
+        detailsBullets: [
+          '原速完成指定半段一遍做题',
+          '二刷：只重听错题音段2-3遍，新增“听不清词”到明天听写清单',
+          '跟读：挑1个最错句子模仿语调（3遍）'
+        ]
+      });
+
+      // 16:15-17:30 语法
+      tasks.push({
+        taskId: `t_${key}_grammar`,
+        timeText: '16:15-17:30',
+        title: extraUnit ? `语法自学/复习：Unit${extraUnit}` : '语法回炉：错因卡背诵',
+        metaText: extraRound,
+        detailsBullets: [
+          '逐条执行闭环：接续→含义→例句中文意思→口头复述',
+          '背诵：至少背出“接续关键词+含义”2轮',
+          '检验：回填错因到语法大纲（不追求扩展，追求能用）'
+        ]
+      });
+
+    } else {
+      // 普通工作日：13-14阅读A + 14-15阅读B + 15:30听力 + 16:15语法
+      tasks.push({
+        taskId: `t_${key}_readA`,
+        timeText: '13:00-14:00',
+        title: `阅读精读：${reading.set}｜${reading.q}`,
+        metaText: '目标：计时做题 + 定位错因',
+        detailsBullets: [
+          '严格按参考用时完成指定部分（短篇12min/篇；中篇25min/篇；按题号对应）',
+          '精读只做“错与犹豫”：找指代/转折/因果/语气',
+          '生词：不认识→加入APP自定义词书（A命中绿宝书→优先复习；否则B阅读补充）'
+        ]
+      });
+
+      tasks.push({
+        taskId: `t_${key}_readB`,
+        timeText: '14:00-15:00',
+        title: '阅读错因二次精读（把不会点补上）',
+        metaText: '目的：准确率优先（从“猜对”变成“读懂”）',
+        detailsBullets: [
+          '回到原文：把错题段落逐句读懂（至少2-3段）',
+          '用语法大纲回填：先标星涉及Unit，再决定是否当天补背',
+          '最后口头复述本篇最关键2句（必须是真正读懂后的复述）'
+        ]
+      });
+
+      tasks.push({
+        taskId: `t_${key}_listen`,
+        timeText: '15:30-16:15',
+        title: `听力：指定半段（原速+二刷错段）`,
+        metaText: `${listening.set}｜${listening.q}`,
+        detailsBullets: [
+          '原速完成指定半段一遍做题',
+          '二刷：只重听错题音段2-3遍，并追加听写清单',
           '跟读：挑1个最错句子模仿语调（3遍）'
         ]
       });
 
       tasks.push({
-        taskId: `t_${key}_grammar_lecture`,
-        timeText:'14:00-17:00',
-        title:`语法专项课（Unit${main.unit ?? '—'}）`,
-        metaText: main.unit ? main.round : '语法回炉',
-        detailsBullets:[
-          '课堂笔记：每条只写“接续关键词 + 含义一句话”',
-          '当场互动：遇老师强调点，立刻用你自己的话再解释一遍',
-          '课后最后10分钟口头连贯背本节内容（至少2遍）'
+        taskId: `t_${key}_grammar`,
+        timeText: '16:15-17:30',
+        title: extraUnit ? `语法自学/复习：Unit${extraUnit}` : '语法回炉：错因卡背诵',
+        metaText: extraRound,
+        detailsBullets: [
+          '逐条执行：接续→含义→例句中文意思→口头复述',
+          '背诵：至少背出“接续关键词+含义”2轮',
+          '用当天语言知识错因做检验（不追新，追闭环）'
         ]
       });
-
-      tasks.push({
-        taskId: `t_${key}_grammar_extra_or_read`,
-        timeText:'17:00-17:30',
-        title: extra && extra.unit ? `补复盘语法（Unit${extra.unit}）` : '阅读错因口述（2个句型）',
-        metaText: extra && extra.unit ? extra.round : '巩固你今天最弱的点',
-        detailsBullets: extra && extra.unit
-          ? [
-              `只背 Unit${extra.unit}：接续+含义（用例句中文复述1遍）`,
-              '把今天语法/阅读里最弱的1条写入“错因卡片”'
-            ]
-          : [
-              '从今天阅读里挑2个错因相关句型：口头复述“为什么错/正确是什么”',
-              '把最弱点加入“错因卡片”（1条）'
-            ]
-      });
-
-      dayPlans.push({
-        key, label: dayLabel, pill:'语法专项课日',
-        reading, listening, mainUnit: main.unit,
-        tasks, dayTaskIds: tasks.map(t=>t.taskId).filter(Boolean)
-      });
-      continue;
     }
 
-    // 普通学习日：13-14 阅读、14-15 阅读二次精读（非必）、15:30 听力、16:15 语法
-    tasks.push({
-      taskId: `t_${key}_readA`,
-      timeText:'13:00-14:00',
-      title:'阅读精读：完成指定题（做题+定位错因）',
-      metaText:`${reading.set}｜${reading.q}`,
-      detailsBullets:[
-        '严格按题型参考用时完成指定部分',
-        '只精读你错/犹豫的句子：指代（它/那个/这种）、转折、因果、语气',
-        '不认识生词→加入APP自定义词书（A/B分级并标记优先复习）'
-      ]
-    });
-
-    tasks.push({
-      taskId: `t_${key}_readB`,
-      timeText:'14:00-15:00',
-      title:'阅读错因二次精读（把“不会点”补上）',
-      metaText:'目的：准确率（错因回填到语法/词汇）',
-      detailsBullets:[
-        '回到原文：把错题段落逐句读懂（至少2-3段）',
-        '用语法大纲回填：标记涉及Unit（先标星）',
-        '最后口头复述本篇最关键2句（保证“真的读懂”）'
-      ]
-    });
-
-    tasks.push({
-      taskId: `t_${key}_listen_norm`,
-      timeText:'15:30-16:15',
-      title:'听力：指定半段（原速+二刷错段）',
-      metaText:`${listening.set}｜${listening.q}`,
-      detailsBullets:[
-        '原速完成指定半段一遍做题',
-        '二刷：只重听错题对应音段2-3遍，并追加听写清单',
-        '跟读：挑1个最错句子模仿语调（3遍）'
-      ]
-    });
-
-    tasks.push({
-      taskId: `t_${key}_grammar_norm`,
-      timeText:'16:15-17:30',
-      title:'语法自学/复习/强化（Unit）',
-      metaText: main.unit ? `Unit${main.unit}｜${main.round}` : '语法补复盘',
-      detailsBullets:[
-        '按轮次做：接续→含义→例句中文意思→口头复述',
-        '背诵：至少把“接续关键词+含义”连续说出2遍',
-        '检验：用语法相关题做12min自检并回填错因'
-      ]
-    });
-
-    // mock覆盖（仅改文字，不改结构：避免页面结构错乱）
+    // 最后天模拟/回炉：只更新提示文字（不删结构）
     if (mockOverrides.has(key)){
-      // 将关键任务改为“模拟/回炉”
       for (const t of tasks){
         if (!t.taskId) continue;
-        if (t.title && t.title.includes('语言知识计时冲刺')){
-          t.metaText = '模拟：用对应真题按参考用时完成并复盘错因Top3';
-          t.detailsBullets = [
-            '严格计时完成：词汇6min + 语法12min + 排序5min + 完型10min',
-            '对完只记录错因Top3，并回填语法大纲对应Unit',
-            '每个错因各找1个例句口头复述'
-          ];
-        }
-        if (t.title && t.title.includes('阅读精读')){
-          t.title = t.title + '（模拟/回炉精读优先）';
-          t.metaText = '只重读最近错因：做到“再错也能纠正”';
-        }
-        if (t.title && t.title.includes('听力')){
-          t.title = '听力跟读/跟写（错段复习为主）';
-          t.metaText = '不新增真题：优先把听力弱点变成“能复述”';
-          t.detailsBullets = [
-            '打开你最近做错的听力音段（按错题记录定位）',
-            '跟读3遍：语调与停顿模仿',
-            '把仍写不准的词加入今天听写确认（用于考试前闭环）'
-          ];
-        }
-        if (t.title && t.title.includes('语法自学')){
-          t.title = '语法背诵回炉（只背接续+含义）';
-          t.metaText = '用错因卡片每天挑5条接续差别';
-        }
+        // 统一把“阅读/听力/语言知识/语法”改成回炉提示（避免页面看起来像在新增内容）
+        if (t.title.includes('阅读精读')) t.metaText = '模拟/回炉优先：只精读近期错因段落';
+        if (t.title.includes('听力')) t.metaText = '回炉：把“听不懂”变成“能复述”';
+        if (t.title.includes('语言知识')) t.metaText = '模拟：按参考用时完成并复盘Top3错因';
+        if (t.title.includes('语法')) t.metaText = '回炉：以错因卡与弱项Unit为主';
       }
     }
 
+    dayTaskIds = tasks.map(t => t.taskId).filter(Boolean);
     dayPlans.push({
-      key, label: dayLabel, pill: lecture ? '语法专项课日' : '学习日',
-      reading, listening, mainUnit: main.unit,
-      tasks, dayTaskIds: tasks.map(t=>t.taskId).filter(Boolean)
+      key, label,
+      pill: lecture ? '语法专项课日' : (saturday ? '周六（仅13:00后）' : '学习日'),
+      reading, listening,
+      mainUnit: extraUnit,
+      tasks,
+      dayTaskIds
     });
   }
 
-  // ====== DOM 渲染：仅渲染“一周/单日”当前页 ======
+  // ---------------- UI 渲染 + 分页 ----------------
   const dayListEl = document.getElementById('dayList');
   const overallBarEl = document.getElementById('overallBar');
   const overallTextEl = document.getElementById('overallText');
@@ -1016,34 +952,37 @@
   const modeWeekBtn = document.getElementById('modeWeekBtn');
   const modeDayBtn = document.getElementById('modeDayBtn');
 
-  let mode = 'week'; // 'week' | 'day'
-  const startKey = fmt(startDate);
-  const endKey = fmt(endDate);
-
-  const today = new Date();
-  const todayKey = fmt(new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0,0,0));
-  dateJump.value = todayKey >= startKey && todayKey <= endKey ? todayKey : startKey;
+  const resetBtn = document.getElementById('resetBtn');
+  const scrollTodayBtn = document.getElementById('scrollTodayBtn');
 
   function getIndexByKey(key){
     return dayPlans.findIndex(p => p.key === key);
   }
 
+  const today = new Date();
+  const todayKey = fmt(new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0,0,0));
+  const startKey = dayPlans[0].key;
+  const endKey = dayPlans[dayPlans.length-1].key;
+
+  dateJump.value = (todayKey >= startKey && todayKey <= endKey) ? todayKey : startKey;
+
+  let mode = 'week'; // 'week' | 'day'
   let currentIndex = Math.max(0, getIndexByKey(dateJump.value));
 
-  function isDayDone(dayPlan){
-    if (!dayPlan.dayTaskIds.length) return true; // 考试日等
-    return dayPlan.dayTaskIds.every(tid => state.task && state.task[tid] === true);
+  function isDayDone(dp){
+    if (!dp.dayTaskIds || dp.dayTaskIds.length === 0) return true;
+    return dp.dayTaskIds.every(tid => state.task && state.task[tid] === true);
   }
 
   function computeStreak(){
-    // 连续完成：从“今天（若不在范围则用最后一天）”往回，直到遇到未完成为止
-    let idx = getIndexByKey(todayKey);
-    if (idx < 0) idx = dayPlans.length - 1;
+    let idx = currentIndex;
+    // 优先以“今天”做参考，如果今天不在范围则以当前页
+    const tIdx = getIndexByKey(todayKey);
+    if (tIdx >= 0 && tIdx < dayPlans.length) idx = tIdx;
 
     let streak = 0;
     for (let i = idx; i >= 0; i--){
-      const done = isDayDone(dayPlans[i]);
-      if (done) streak++;
+      if (isDayDone(dayPlans[i])) streak++;
       else break;
     }
     return streak;
@@ -1055,158 +994,136 @@
     let doneDays = 0;
 
     for (const dp of dayPlans){
-      for (const tid of dp.dayTaskIds){
+      for (const tid of (dp.dayTaskIds || [])){
         totalTasks++;
         if (state.task && state.task[tid] === true) doneTasks++;
       }
       if (isDayDone(dp)) doneDays++;
     }
-    const overallPct = totalTasks ? Math.round(doneTasks/totalTasks*100) : 0;
 
+    const overallPct = totalTasks ? Math.round(doneTasks/totalTasks*100) : 0;
     overallBarEl.style.width = overallPct + '%';
     overallTextEl.textContent = `已完成：${doneTasks}/${totalTasks}（${overallPct}%）`;
     doneCountEl.textContent = `${doneTasks} / ${totalTasks}`;
     doneDaysEl.textContent = `${doneDays} / ${dayPlans.length}`;
-
     streakEl.textContent = `${computeStreak()} 天`;
   }
 
-  function dayRangeText(startIdx, count){
-    const a = dayPlans[startIdx];
-    const b = dayPlans[Math.min(dayPlans.length-1, startIdx+count-1)];
-    if (!a || !b) return '—';
-    if (a.key === b.key) return a.key;
-    return `${a.key} ~ ${b.key}`;
-  }
-
   function weekStartIndex(idx){
-    // 周视图：以周一为起点（周日视为上一周的周一往回推6天）
-    const d = days[idx];
-    const dow = d.getDay(); // 0 Sun ... 6 Sat
+    // 周一为起点
+    const dow = days[idx].getDay(); //0 Sun..6 Sat
     const offsetToMonday = (dow === 0) ? 6 : (dow - 1);
     return Math.max(0, idx - offsetToMonday);
   }
 
   function renderCurrent(){
-    // 清空
     dayListEl.innerHTML = '';
 
     let startIdx = currentIndex;
-    let count = mode === 'week' ? 7 : 1;
+    let count = (mode === 'week') ? 7 : 1;
 
     if (mode === 'week'){
       startIdx = weekStartIndex(currentIndex);
-      // 为了显示恰好7天，尽量不越界
       if (startIdx + 7 > dayPlans.length){
         startIdx = Math.max(0, dayPlans.length - 7);
       }
-    } else {
-      count = 1;
     }
 
-    // range 标题
-    const rangeText = dayRangeText(startIdx, count);
-    const a = dayPlans[startIdx];
-    const b = dayPlans[Math.min(dayPlans.length-1, startIdx+count-1)];
-    const rangeSub = `${a ? (a.label) : ''}${b && a && a.key!==b.key ? ` · ${b.label}` : ''} · 显示 ${count} 天`;
-    rangeTitleEl.textContent = `当前：${rangeText}`;
-    rangeSubEl.textContent = rangeSub;
+    const endIdx = Math.min(dayPlans.length - 1, startIdx + count - 1);
 
-    // 任务数量提示
+    const a = dayPlans[startIdx];
+    const b = dayPlans[endIdx];
+
+    const rangeText = (a && b) ? (a.key === b.key ? a.key : `${a.key} ~ ${b.key}`) : '—';
+    rangeTitleEl.textContent = `当前：${rangeText}`;
+    rangeSubEl.textContent = `${count}天视图`;
+
+    // 计算本页完成提示
     let visibleTaskTotal = 0;
     let visibleTaskDone = 0;
-    for (let i=startIdx; i<Math.min(dayPlans.length, startIdx+count); i++){
+    for (let i = startIdx; i <= endIdx; i++){
       const dp = dayPlans[i];
-      visibleTaskTotal += dp.dayTaskIds.length;
-      for (const tid of dp.dayTaskIds){
+      visibleTaskTotal += (dp.dayTaskIds || []).length;
+      for (const tid of (dp.dayTaskIds || [])){
         if (state.task && state.task[tid] === true) visibleTaskDone++;
       }
     }
     weekTasksHintEl.textContent = `本页完成：${visibleTaskDone}/${visibleTaskTotal}`;
 
-    // 渲染卡片
-    for (let i=startIdx; i<Math.min(dayPlans.length, startIdx+count); i++){
+    // 卡片渲染
+    for (let i = startIdx; i <= endIdx; i++){
       const dp = dayPlans[i];
-      const tasks = dp.tasks;
-
-      const totalTasksCount = dp.dayTaskIds.length;
-      const completedCount = dp.dayTaskIds.filter(tid => state.task && state.task[tid] === true).length;
-      const pct = totalTasksCount ? Math.round(completedCount/totalTasksCount*100) : 0;
-
-      const pillText = dp.pill || '学习日';
-      const lectureTag = dp.pill === '语法专项课日';
+      const totalTasks = (dp.dayTaskIds || []).length;
+      const doneTasks = (dp.dayTaskIds || []).filter(tid => state.task && state.task[tid] === true).length;
+      const pct = totalTasks ? Math.round(doneTasks/totalTasks*100) : 0;
 
       const dayCard = document.createElement('div');
       dayCard.className = 'dayCard';
+      dayCard.dataset.dayKey = dp.key;
 
-      // 标题区
       const headerHTML = `
         <div class="dayHeader">
           <div class="meta">
             <div class="dateRow">
               <div class="date">${dp.key}</div>
-              <div class="pill">${pillText}</div>
+              <div class="pill">${dp.pill}</div>
             </div>
             <div class="sub">
-              ${dp.label} · 阅读：${dp.reading.set}（${dp.reading.q}） · 听力：${dp.listening.set}（${dp.listening.q}） · 语法：${dp.mainUnit ? 'Unit'+dp.mainUnit : '—'}
+              ${dp.label} · 阅读：${dp.reading.set}（${dp.reading.q}） · 听力：${dp.listening.set}（${dp.listening.q}）
+              ${dp.mainUnit ? ` · 语法：Unit${dp.mainUnit}` : ''}
             </div>
           </div>
           <div class="right">
-            <div class="tiny">今日完成：${completedCount}/${totalTasksCount || 0}</div>
+            <div class="tiny">今日完成：${doneTasks}/${totalTasks || 0}</div>
             <div class="dayProgress">
-              <div class="bar"><i style="width:${pct}%"></i></div>
+              <div class="bar"><i style="width:${pct}%;"></i></div>
             </div>
           </div>
         </div>
       `;
       dayCard.innerHTML = headerHTML;
 
-      // 任务区
       const tasksWrap = document.createElement('div');
       tasksWrap.className = 'tasks';
 
-      if (!tasks.length){
-        tasksWrap.innerHTML = `<div class="emptyHint">本日暂无任务（仅用于打钩统计）</div>`;
+      if (!dp.tasks || dp.tasks.length === 0){
+        tasksWrap.innerHTML = `<div class="emptyHint">本日暂无任务</div>`;
       } else {
-        tasksWrap.innerHTML = tasks.map(t => {
+        tasksWrap.innerHTML = dp.tasks.map(t => {
           if (!t.taskId){
-            // 非打钩卡
             return `
               <div class="task">
                 <div class="taskInner">
-                  <div class="taskTop">
-                    <div>
-                      <div class="tTitle">${t.timeText}｜${t.title}</div>
-                      <p class="tMeta">${t.metaText}</p>
-                    </div>
-                  </div>
+                  <div class="tTitle">${t.timeText}｜${t.title}</div>
+                  <div class="tMeta">${t.metaText || ''}</div>
                   <details>
-                    <summary>怎么做（点击展开）</summary>
-                    <div class="detail"><ul>${(t.detailsBullets || []).map(x=>`<li>${x}</li>`).join('')}</ul></div>
+                    <summary>怎么做（展开）</summary>
+                    <div class="detail">
+                      <ul>${(t.detailsBullets||[]).map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ul>
+                    </div>
                   </details>
                 </div>
               </div>
             `;
           }
-
-          const checked = state.task && state.task[t.taskId] === true;
+          const checked = state.task && state.task[ t.taskId ] === true;
 
           return `
             <div class="task">
               <div class="taskInner">
                 <div class="taskTop">
-                  <div style="display:flex;align-items:flex-start;">
-                    <input type="checkbox" ${checked ? 'checked' : ''} id="${t.taskId}" />
+                  <div style="display:flex; align-items:flex-start;">
+                    <input type="checkbox" id="${t.taskId}" ${checked ? 'checked' : ''} />
                     <div>
                       <div class="tTitle">${t.timeText}｜${t.title}</div>
-                      <p class="tMeta">${t.metaText}</p>
+                      <div class="tMeta">${escapeHtml(t.metaText || '')}</div>
                     </div>
                   </div>
                 </div>
                 <details>
-                  <summary>具体怎么做（点击展开）</summary>
+                  <summary>具体怎么做（展开）</summary>
                   <div class="detail">
-                    <ul>${(t.detailsBullets || []).map(x=>`<li>${x}</li>`).join('')}</ul>
+                    <ul>${(t.detailsBullets||[]).map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ul>
                   </div>
                 </details>
               </div>
@@ -1216,124 +1133,95 @@
       }
 
       dayCard.appendChild(tasksWrap);
-      dayCard.dataset.dayKey = dp.key;
-      dayCard.dataset.dayTaskIds = dp.dayTaskIds.join(',');
-
       dayListEl.appendChild(dayCard);
     }
-
-    // 高亮当前日期卡片
-    const sel = document.querySelector(`.dayCard[data-day-key]`);
-    const targetKey = dayPlans[currentIndex]?.key;
-    const currentCard = document.querySelector(`.dayCard[data-day-key="${targetKey}"]`);
-    // 上面由于属性写错就不依赖；用替代选择：
-    const cards = Array.from(dayListEl.querySelectorAll('.dayCard'));
-    cards.forEach(c => c.style.outline = 'none');
-    const found = cards.find(c => c.dataset.dayKey === targetKey);
-    if (found){
-      found.style.outline = '2px solid rgba(34,197,94,.55)';
-      found.style.outlineOffset = '3px';
-      found.style.borderRadius = '18px';
-    }
   }
 
-  function hookCheckboxes(){
-    const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"]'));
-    checkboxes.forEach(cb => {
-      cb.addEventListener('change', (e) => {
-        const id = e.target.id;
-        if (!state.task) state.task = {};
-        state.task[id] = e.target.checked === true;
-        saveState(state);
-        computeOverall();
-        renderCurrent(); // 刷新本页进度条与统计
-        // 不做弹窗，避免打断节奏
-      });
-    });
+  function escapeHtml(str){
+    return String(str)
+      .replaceAll('&','&amp;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;')
+      .replaceAll('"','&quot;')
+      .replaceAll("'","&#039;");
   }
 
-  // 初始化渲染
-  function initDateUI(){
-    // 修复 dateJump 设置到范围外的情况
-    if (!(dateJump.value >= startKey && dateJump.value <= endKey)){
-      dateJump.value = startKey;
-    }
-  }
+  // Checkbox 事件：用事件委托，避免反复绑定导致异常
+  dayListEl.addEventListener('change', (e) => {
+    const target = e.target;
+    if (!target || target.type !== 'checkbox') return;
 
-  // 控制：翻页
-  function shiftPage(delta){
-    // week/page delta: move by 7 days; day mode: move by 1 day
-    const step = (mode === 'week') ? 7 : 1;
-    let next = currentIndex + delta * step;
+    const id = target.id;
+    if (!id) return;
 
+    if (!state.task) state.task = {};
+    state.task[id] = target.checked === true;
+    saveState();
+    computeOverall();
+    renderCurrent();
+  });
+
+  function shiftBy(step){
+    const move = (mode === 'week') ? 7 : 1;
+    let next = currentIndex + step*move;
     next = Math.max(0, Math.min(dayPlans.length-1, next));
     currentIndex = next;
-
     dateJump.value = dayPlans[currentIndex].key;
     renderCurrent();
-    hookCheckboxes();
     computeOverall();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // 控制：模式切换
-  function setMode(newMode){
-    mode = newMode;
-    modeWeekBtn.classList.toggle('active', mode === 'week');
-    modeDayBtn.classList.toggle('active', mode === 'day');
+  prevBtn.addEventListener('click', () => shiftBy(-1));
+  nextBtn.addEventListener('click', () => shiftBy(1));
 
-    // 切回模式后重渲染即可
+  modeWeekBtn.addEventListener('click', () => {
+    mode = 'week';
+    modeWeekBtn.classList.add('active');
+    modeDayBtn.classList.remove('active');
     renderCurrent();
-    hookCheckboxes();
-  }
+    computeOverall();
+  });
 
-  // 日期跳转
+  modeDayBtn.addEventListener('click', () => {
+    mode = 'day';
+    modeDayBtn.classList.add('active');
+    modeWeekBtn.classList.remove('active');
+    renderCurrent();
+    computeOverall();
+  });
+
   dateJump.addEventListener('change', () => {
-    const key = dateJump.value;
-    const idx = getIndexByKey(key);
+    const idx = getIndexByKey(dateJump.value);
     if (idx >= 0){
       currentIndex = idx;
       renderCurrent();
-      hookCheckboxes();
       computeOverall();
     }
   });
 
-  prevBtn.addEventListener('click', () => shiftPage(-1));
-  nextBtn.addEventListener('click', () => shiftPage(1));
-
-  modeWeekBtn.addEventListener('click', () => setMode('week'));
-  modeDayBtn.addEventListener('click', () => setMode('day'));
-
-  // 跳到今天
-  document.getElementById('scrollTodayBtn').addEventListener('click', () => {
+  scrollTodayBtn.addEventListener('click', () => {
     const idx = getIndexByKey(todayKey);
     if (idx >= 0){
       currentIndex = idx;
       dateJump.value = todayKey;
       renderCurrent();
-      hookCheckboxes();
       computeOverall();
-      // 滚动到顶部
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      alert('今天不在本清单日期范围内：' + startKey + ' - ' + endKey);
+      alert('今天不在清单日期范围内：' + startKey + ' - ' + endKey);
     }
   });
 
-  // Reset
-  document.getElementById('resetBtn').addEventListener('click', () => {
+  resetBtn.addEventListener('click', () => {
     if (!confirm('确定要清空本网页在本地的勾选记录吗？')) return;
     localStorage.removeItem(stateKey);
     location.reload();
   });
 
-  // 先渲染
-  initDateUI();
-  currentIndex = Math.max(0, getIndexByKey(dateJump.value));
+  // 初始化
   computeOverall();
   renderCurrent();
-  hookCheckboxes();
-
 })();
 </script>
 </body>
