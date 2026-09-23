@@ -1,1516 +1,1263 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>N1备考打卡系统（含时间分配）</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JLPT N1每日学习清单（2026/10/12-12/06）</title>
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
+    :root{
+      --bg1:#0b1020;
+      --bg2:#0e1630;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.08);
+      --text:#eaf1ff;
+      --muted: rgba(234,241,255,.72);
+      --line: rgba(255,255,255,.12);
+      --accent:#7c5cff;
+      --accent2:#2ee9a6;
+      --warn:#ffcc66;
+      --danger:#ff5c7a;
+      --shadow: 0 18px 60px rgba(0,0,0,.35);
+      --radius: 18px;
+      --radius2: 14px;
+    }
+    *{box-sizing:border-box}
     body{
-      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg,#667eea 0%, #764ba2 100%);
-      min-height:100vh;
-      padding:20px;
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB";
+      color: var(--text);
+      background: radial-gradient(1200px 600px at 15% 10%, rgba(124,92,255,.35), transparent 60%),
+                  radial-gradient(900px 500px at 80% 20%, rgba(46,233,166,.22), transparent 60%),
+                  linear-gradient(180deg, var(--bg1), var(--bg2));
+      padding: 28px 18px 64px;
     }
-    .container{ max-width:1400px; margin:0 auto; }
 
-    .header{
-      text-align:center;
-      color:white;
-      margin-bottom:30px;
-      background: rgba(0,0,0,0.2);
-      padding:20px;
-      border-radius:10px;
+    .wrap{
+      max-width: 1180px;
+      margin: 0 auto;
     }
-    .header h1{ font-size:2.2em; margin-bottom:10px; text-shadow:2px 2px 4px rgba(0,0,0,0.3); }
-    .header p{ opacity:0.95; font-size:1.05em; }
 
-    .nav-tabs{
-      display:flex; gap:10px; margin-bottom:30px;
-      flex-wrap:wrap; justify-content:center;
+    header{
+      display:flex;
+      gap:18px;
+      align-items:flex-start;
+      justify-content:space-between;
+      margin-bottom: 18px;
     }
-    .nav-tab-btn{
-      padding:12px 24px; background:white; color:#667eea;
-      border:2px solid #667eea; border-radius:5px;
-      cursor:pointer; font-weight:bold; font-size:1em;
-      transition:all .3s ease;
-    }
-    .nav-tab-btn.active{ background:#667eea; color:white; }
-    .nav-tab-btn:hover{ transform:translateY(-2px); box-shadow:0 4px 8px rgba(0,0,0,0.2); }
 
-    .tab-content{ display:none; }
-    .tab-content.active{ display:block; }
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      padding: 18px 18px 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      min-width: 520px;
+    }
+    .title h1{
+      margin:0;
+      font-size: 18px;
+      letter-spacing: .2px;
+      font-weight: 800;
+    }
+    .title p{
+      margin:0;
+      color: var(--muted);
+      line-height:1.55;
+      font-size: 13px;
+    }
 
     .stats{
       display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
-      gap:20px; margin-bottom:20px;
+      grid-template-columns: repeat(3, minmax(160px, 1fr));
+      gap: 12px;
+      width: 420px;
     }
-    .stat-card{
-      background:white; padding:20px; border-radius:10px;
-      box-shadow:0 4px 6px rgba(0,0,0,0.1); text-align:center;
+    .stat{
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px 14px;
+      box-shadow: 0 14px 50px rgba(0,0,0,.18);
+      position:relative;
+      overflow:hidden;
     }
-    .stat-card h3{
-      color:#667eea; font-size:.9em; margin-bottom:10px; text-transform:uppercase;
+    .stat:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(500px 150px at 10% 10%, rgba(124,92,255,.22), transparent 55%),
+                  radial-gradient(500px 150px at 90% 0%, rgba(46,233,166,.16), transparent 55%);
+      pointer-events:none;
     }
-    .stat-card .number{ font-size:2.5em; color:#333; font-weight:bold; }
+    .stat .k{
+      position:relative;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    .stat .v{
+      position:relative;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing:.2px;
+    }
 
-    .progress-bar{
-      margin-top:10px; height:8px; background:#eee; border-radius:4px; overflow:hidden;
+    .progressRow{
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.05);
+      box-shadow: 0 18px 60px rgba(0,0,0,.16);
     }
-    .progress-fill{
+    .progressTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .progressTop .left{
+      display:flex; flex-direction:column; gap:4px;
+    }
+    .progressTop .left .label{
+      color:var(--muted); font-size:12px;
+    }
+    .progressTop .left .value{
+      font-size:14px; font-weight:800;
+    }
+    .bar{
+      height: 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.10);
+      overflow:hidden;
+      position:relative;
+    }
+    .bar > i{
+      display:block;
       height:100%;
-      background:linear-gradient(90deg,#667eea,#764ba2);
-      transition:width .3s ease;
+      width:0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 999px;
+      transition: width .25s ease;
     }
-
     .controls{
-      background:white; padding:20px; border-radius:10px; margin-bottom:20px;
-      display:flex; gap:15px; flex-wrap:wrap;
-      box-shadow:0 4px 6px rgba(0,0,0,0.1);
-      align-items:center; justify-content:space-between;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-end;
+      flex-wrap:wrap;
     }
-    .date-navigation{ display:flex; justify-content:space-between; align-items:center; gap:15px; flex-wrap:wrap; }
-    .date-navigation button{ width:140px; padding:12px; }
-    .controls input, .controls button{
-      padding:12px 20px; border:2px solid #667eea; border-radius:5px;
-      font-size:1em; cursor:pointer; transition:all .3s ease; background:white; color:#333;
+    button{
+      cursor:pointer;
+      border:none;
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.12);
+      transition: transform .12s ease, background .12s ease;
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing:.2px;
     }
-    .controls button{
-      background:#667eea; color:white; font-weight:bold; border:none;
+    button:hover{ transform: translateY(-1px); background: rgba(255,255,255,.11); }
+    button.danger{
+      background: rgba(255,92,122,.12);
+      border-color: rgba(255,92,122,.35);
+      color:#ffd7df;
     }
-    .controls button:hover{
-      background:#764ba2; transform:translateY(-2px); box-shadow:0 4px 8px rgba(0,0,0,0.2);
-    }
-    .controls .ghost-btn{
-      background:#ff6b6b; border:none;
-    }
-    .export-btn{
-      background:#38ef7d !important; border:none !important;
-    }
-    .export-btn:hover{
-      background:#11998e !important;
-    }
-    .current-date{ font-size:1.1em; font-weight:bold; color:#333; }
 
-    .daily-time-allocation{
-      background:white; padding:20px; border-radius:10px; margin-bottom:20px;
-      box-shadow:0 4px 6px rgba(0,0,0,0.1);
+    .nav{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      margin: 18px 0 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.04);
     }
-    .daily-time-allocation h3{ color:#667eea; margin-bottom:12px; }
-    .time-allocation-grid{
-      display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:12px;
+    .nav .left{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
     }
-    .time-slot{
-      border:1px solid #eee; border-radius:10px; background:#fafafa; padding:12px;
+    .nav .left .t1{font-size:13px; font-weight:900}
+    .nav .left .t2{font-size:12px; color:var(--muted)}
+    .nav .right{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      justify-content:flex-end;
     }
-    .time-slot-title{ font-weight:bold; color:#667eea; margin-bottom:10px; }
-    .time-slot-item{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      background:white; border-radius:8px; padding:8px 10px; margin-bottom:8px;
-      border-left:4px solid #667eea;
+    select{
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px;
+      padding: 10px 12px;
+      outline:none;
+      font-weight: 800;
     }
-    .time-slot-item.completed{ border-left-color:#38ef7d; background:#f0fdf4; }
-    .time-slot-item.optional{
-      border-left-color:#c9c9c9; background:#f6f6f6; color:#666;
-    }
-    .time-slot-left{
-      min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-      color:#333; max-width:220px;
-    }
-    .time-slot-min{ color:#333; font-weight:bold; flex-shrink:0; }
 
-    .schedule-container{
+    .dayList{
+      display:flex;
+      flex-direction:column;
+      gap: 14px;
+    }
+    .dayCard{
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 60px rgba(0,0,0,.18);
+      overflow:hidden;
+    }
+    .dayHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.08);
+    }
+    .dayHeader .meta{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      min-width: 320px;
+    }
+    .dayHeader .meta .date{
+      font-size: 15px;
+      font-weight: 1000;
+      letter-spacing:.2px;
+      display:flex; gap:10px; align-items:baseline; flex-wrap:wrap;
+    }
+    .pill{
+      font-size: 12px;
+      color: #d9d1ff;
+      background: rgba(124,92,255,.18);
+      border: 1px solid rgba(124,92,255,.35);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 900;
+    }
+    .dayHeader .meta .sub{
+      font-size: 12px;
+      color: var(--muted);
+      line-height:1.35;
+    }
+    .dayHeader .right{
+      display:flex; align-items:center; gap:12px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .tiny{
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .dayProgress{
+      width: 190px;
+      min-width: 190px;
+    }
+    .dayProgress .bar{
+      height: 12px;
+      background: rgba(255,255,255,.08);
+    }
+
+    .tasks{
+      padding: 12px 14px 16px;
       display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(360px, 1fr));
-      gap:20px; margin-bottom:20px;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
     }
-    .schedule-card{
-      background:white; border-radius:10px; box-shadow:0 4px 6px rgba(0,0,0,0.1); overflow:hidden;
-    }
-    .schedule-header{
-      background:linear-gradient(135deg,#667eea 0%, #764ba2 100%);
-      color:white; padding:18px; font-size:1.15em; font-weight:bold;
-    }
-    .schedule-content{ padding:16px; }
-
-    .task-item{
-      display:flex; align-items:flex-start; gap:12px;
-      margin-bottom:12px; padding:12px;
-      background:#f9f9f9; border-radius:8px; border-left:4px solid #667eea;
-    }
-    .task-item.completed{ background:#f0f9ff; border-left-color:#38ef7d; opacity:.92; }
-    .task-content{ flex:1; min-width:0; }
-    .task-title{ font-weight:bold; color:#333; margin-bottom:6px; font-size:.95em; }
-    .task-description{ color:#666; font-size:.85em; line-height:1.45; }
-    .task-duration{
-      display:inline-block; background:#667eea; color:white;
-      padding:4px 12px; border-radius:20px;
-      font-size:.75em; margin-top:8px; font-weight:bold;
-    }
-    .task-checkbox{
-      width:24px; height:24px; margin-top:2px; cursor:pointer;
-      accent-color:#667eea; flex-shrink:0;
-    }
-    .guide-button{
-      display:inline-block; margin-top:10px; padding:6px 12px;
-      background:#667eea; color:white; border:none; border-radius:5px;
-      cursor:pointer; font-size:.85em;
-      transition:all .3s ease;
-    }
-    .guide-button:hover{ background:#764ba2; }
-
-    .daily-summary{
-      background:white; padding:18px; border-radius:10px; box-shadow:0 4px 6px rgba(0,0,0,0.1);
-    }
-    .summary-row{ display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #eee; }
-    .summary-row:last-child{ border-bottom:none; }
-    .summary-label{ font-weight:bold; color:#667eea; }
-    .summary-value{ color:#333; }
-
-    .footer{
-      text-align:center; color:white; padding:20px; margin-top:30px; opacity:.85;
+    @media (max-width: 980px){
+      .title{min-width:auto}
+      .stats{width:auto; grid-template-columns: 1fr}
+      .tasks{ grid-template-columns: 1fr; }
+      .dayHeader{ align-items:flex-start; }
+      .dayHeader .meta{min-width:auto}
+      .dayProgress{width: 100%; min-width: 0}
     }
 
-    /* 听力内容基本样式（后面第二部分会粘贴你的原正文） */
-    .listening-guide-content{
-      background:white; padding:30px; border-radius:10px;
-      max-width:900px; margin:0 auto;
+    .task{
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius2);
+      padding: 12px 12px;
+      position:relative;
+      overflow:hidden;
     }
-    .listening-guide-content h2{
-      color:#667eea; margin-bottom:20px; font-size:1.8em; border-bottom:3px solid #667eea; padding-bottom:10px;
+    .task:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(400px 120px at 10% 0%, rgba(124,92,255,.18), transparent 55%),
+                  radial-gradient(400px 120px at 90% 10%, rgba(46,233,166,.12), transparent 55%);
+      pointer-events:none;
+      opacity:.65;
     }
-    .listening-guide-content h3{ color:#764ba2; margin-top:25px; margin-bottom:15px; font-size:1.3em; }
-    .listening-guide-content p{ color:#333; line-height:1.8; margin-bottom:15px; }
-    .listening-guide-content ul, .listening-guide-content ol{ margin-left:20px; margin-bottom:15px; }
-    .listening-guide-content li{ margin-bottom:10px; color:#333; line-height:1.7; }
-    .guide-section{ background:white; padding:20px; border-radius:8px; margin-bottom:20px; border-left:5px solid #667eea; }
-    .guide-step{ background:#f9f9f9; padding:12px; border-radius:6px; margin-bottom:12px; border-left:4px solid #667eea; }
-    .warning-box{ background:#fff3cd; border:2px solid #ffc107; padding:15px; border-radius:6px; margin-bottom:15px; color:#333; line-height:1.7; }
-    .success-box{ background:#d4edda; border:2px solid #28a745; padding:15px; border-radius:6px; margin-bottom:15px; color:#333; line-height:1.7; }
-    .time-table{ width:100%; border-collapse:collapse; margin-bottom:15px; background:white; }
-    .time-table th, .time-table td{ border:1px solid #ddd; padding:12px; text-align:left; }
-    .time-table th{ background:#667eea; color:white; font-weight:bold; }
-    .back-to-schedule{
-      display:inline-block; margin-bottom:20px; padding:12px 24px;
-      background:#667eea; color:white; text-decoration:none; border-radius:5px; cursor:pointer;
-      transition:all .3s ease;
+    .task .row{
+      position:relative;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      justify-content:space-between;
     }
-    .back-to-schedule:hover{ background:#764ba2; }
+    .task .left{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
 
-    .guide-modal{
-      display:none; position:fixed; z-index:1000; left:0; top:0;
-      width:100%; height:100%; background:rgba(0,0,0,0.5);
-      animation:fadeIn .2s ease;
+    input[type="checkbox"]{
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--accent2);
     }
-    .guide-modal.show{ display:flex; justify-content:center; align-items:center; }
-    @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
-    .guide-content{
-      background:white; padding:24px; border-radius:10px;
-      width:min(900px,92vw); max-height:82vh; overflow-y:auto;
-      box-shadow:0 8px 16px rgba(0,0,0,0.3);
+    .task .tTitle{
+      font-weight: 1000;
+      font-size: 13px;
+      line-height: 1.3;
+      margin-bottom: 6px;
     }
-    .close-guide{ float:right; font-size:1.6em; font-weight:bold; cursor:pointer; color:#999; }
-    .close-guide:hover{ color:#333; }
-
-    .no-data{ grid-column:1/-1; text-align:center; color:#999; padding:40px 20px; }
-    @media (max-width:768px){
-      .controls{ flex-direction:column; align-items:stretch; }
-      .controls input, .controls button{ width:100%; }
-      .date-navigation button{ width:120px; }
-      .schedule-container{ grid-template-columns:1fr; }
-      .time-slot-left{ max-width:160px; }
+    .task .tMeta{
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+      margin: 0 0 8px;
+    }
+    details{
+      position:relative;
+    }
+    summary{
+      list-style:none;
+      cursor:pointer;
+      font-weight: 900;
+      font-size: 12px;
+      color:#dfe7ff;
+      user-select:none;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    summary::-webkit-details-marker{display:none}
+    .detail{
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px dashed rgba(255,255,255,.16);
+      background: rgba(0,0,0,.12);
+      color: rgba(234,241,255,.85);
+      font-size: 12.5px;
+      line-height: 1.55;
+    }
+    .detail ul{
+      margin:0; padding-left:18px;
+    }
+    .detail li{ margin: 4px 0; }
+    .foot{
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      font-size: 12px;
+      line-height:1.6;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      font-weight: 900;
+      color: rgba(234,241,255,.92);
+    }
+    .dot{
+      width:10px; height:10px; border-radius:50%;
+      background: var(--accent2);
+      box-shadow: 0 0 0 4px rgba(46,233,166,.12);
     }
   </style>
 </head>
-
 <body>
-<div class="container">
-  <div class="header">
-    <h1>📚 N1备考打卡系统（含每日时间分配）</h1>
-    <p>坚持82天，通过N1考试！加油💪</p>
-    <p style="font-size:0.9em; margin-top:10px;">考试日期: 2026年12月4日</p>
-  </div>
+<div class="wrap">
+  <header>
+    <div class="title">
+      <h1>JLPT N1 每日学习清单（打钩版）</h1>
+      <p>
+        使用方法：每天只需按网页任务打钩 ✅（每个时间块一项）。<br/>
+        清单会自动统计 <b>完成进度</b>、<b>连续完成天数</b>，并保存在浏览器本地（localStorage）。<br/>
+        <span style="color:rgba(234,241,255,.9);font-weight:900;">时间段严格按你要求：周一/三/五 14:00-17:00 语法专项课；周六 13:00 前不安排学习；周日仍学习。</span>
+      </p>
+    </div>
 
-  <div class="nav-tabs">
-    <button class="nav-tab-btn active" onclick="switchTab('schedule', this)">📅 学习打卡</button>
-    <button class="nav-tab-btn" onclick="switchTab('listening', this)">🎧 听力学习指南</button>
-  </div>
-
-  <!-- 选项卡1：学习打卡 -->
-  <div id="schedule" class="tab-content active">
     <div class="stats">
-      <div class="stat-card">
-        <h3>总任务数</h3>
-        <div class="number" id="totalTasks">0</div>
-        <div class="progress-bar"><div class="progress-fill" id="totalProgressFill" style="width:0%"></div></div>
+      <div class="stat">
+        <div class="k">当前连续完成</div>
+        <div class="v" id="streak">0 天</div>
       </div>
-      <div class="stat-card">
-        <h3>已完成</h3>
-        <div class="number" id="completedTasks">0</div>
-        <div class="progress-bar"><div class="progress-fill" id="completedProgressFill" style="width:0%"></div></div>
+      <div class="stat">
+        <div class="k">已完成任务</div>
+        <div class="v" id="doneCount">0 / 0</div>
       </div>
-      <div class="stat-card">
-        <h3>完成率（按分钟）</h3>
-        <div class="number" id="completionRate">0%</div>
-        <div class="progress-bar"><div class="progress-fill" id="rateProgressFill" style="width:0%"></div></div>
-      </div>
-      <div class="stat-card">
-        <h3>连续完成天数</h3>
-        <div class="number" id="consecutiveDays">0</div>
-        <div class="progress-bar"><div class="progress-fill" id="consecutiveProgressFill" style="width:0%"></div></div>
+      <div class="stat">
+        <div class="k">已完成天数</div>
+        <div class="v" id="doneDays">0 / 0</div>
       </div>
     </div>
+  </header>
 
-    <div class="controls">
-      <div class="date-navigation">
-        <button onclick="previousDate()">← 前一天</button>
-        <div>
-          <input type="date" id="dateSelector" onchange="selectDate()">
-          <div class="current-date" id="currentDateDisplay">今日</div>
-        </div>
-        <button onclick="nextDate()">后一天 →</button>
+  <div class="progressRow">
+    <div class="progressTop">
+      <div class="left">
+        <div class="label">整体进度</div>
+        <div class="value" id="overallText">-</div>
       </div>
-
-      <div style="display:flex; gap:15px; flex-wrap:wrap; align-items:center;">
-        <button onclick="jumpToToday()">📅 回到今天</button>
-        <button onclick="resetAll()" class="ghost-btn">🔄 重置所有</button>
-        <button onclick="exportData()" class="export-btn">📊 导出数据</button>
+      <div class="controls">
+        <button id="scrollTodayBtn">跳到今天</button>
+        <button class="danger" id="resetBtn" title="清空本网页在本地的勾选记录">清空打钩记录</button>
       </div>
     </div>
-
-    <!-- 每日学习时间分配 -->
-    <div class="daily-time-allocation">
-      <h3>⏰ 今日学习时间分配（阶段固定时段 + 每个项目分钟数）</h3>
-      <div id="timeAllocation" class="time-allocation-grid"></div>
-    </div>
-
-    <div class="schedule-container" id="scheduleContainer"></div>
-
-    <div class="daily-summary">
-      <h3 style="color:#667eea; margin-bottom:15px;">📋 今日任务总结</h3>
-      <div class="summary-row">
-        <span class="summary-label">总任务数：</span>
-        <span class="summary-value" id="todayTotalTasks">0</span>
-      </div>
-      <div class="summary-row">
-        <span class="summary-label">已完成：</span>
-        <span class="summary-value" id="todayCompletedTasks">0</span>
-      </div>
-      <div class="summary-row">
-        <span class="summary-label">完成进度：</span>
-        <span class="summary-value" id="todayProgress">0%</span>
-      </div>
-      <div class="summary-row">
-        <span class="summary-label">预计剩余时间：</span>
-        <span class="summary-value" id="estimatedTime">-</span>
-      </div>
+    <div class="bar" aria-label="overall progress">
+      <i id="overallBar"></i>
     </div>
   </div>
 
-  <!-- 选项卡2：听力学习指南（正文在第二部分继续粘贴） -->
-  <div id="listening" class="tab-content">
-    <div class="listening-guide-content">
-      <button class="back-to-schedule" onclick="switchTab('schedule')">← 返回学习打卡</button>
-      <h2>🎧 听力学习完整指南</h2>
-
-      <!-- ====== 听力正文：请在第二条消息把这段替换为你原始代码的全部正文 ====== -->
-                      <!-- 精听六步法 -->
-                <div class="guide-section six-step">
-                    <h3>第一部分：听力精听六步法</h3>
-                    <p>这是N1听力备考中最关键的训练方法。每次精听一道题目时，请严格按照以下六个步骤执行。整个过程约20-30分钟完成1题。</p>
-
-                    <h3 style="color: #e74c3c; margin-top: 20px;">📌 第1步：初听做题（5分钟）</h3>
-                    <div class="step-detail">
-                        <strong>目的：</strong> 了解你目前能听懂多少，测试真实听力水平
-                        <br><br>
-                        <strong>操作步骤：</strong>
-                        <ol>
-                            <li>打开N1真题听力音频（如2020/6真题 問題1 第1题）</li>
-                            <li><strong>不要看原文/脚本</strong></li>
-                            <li>正常速度听一遍，从头到尾不暂停</li>
-                            <li>听完立刻选择答案</li>
-                            <li>标记：哪些地方听不清？哪些词没反应过来？</li>
-                        </ol>
-                        <br>
-                        <strong>常见错误：</strong>
-                        <ul>
-                            <li>❌ 边听边看原文 → 这样测不出真实水平</li>
-                            <li>❌ 听到一半暂停回放 → 打破了连续听的节奏</li>
-                            <li>❌ 先看原文再听 → 失去了初听的意义</li>
-                        </ul>
-                    </div>
-
-                    <h3 style="color: #e74c3c; margin-top: 20px;">📌 第2步：对答案（2分钟）</h3>
-                    <div class="step-detail">
-                        <strong>目的：</strong> 了解自己听懂了多少
-                        <br><br>
-                        <strong>操作步骤：</strong>
-                        <ol>
-                            <li>拿出N1真题的答案卡</li>
-                            <li>逐题核对自己的答案</li>
-                            <li>用红笔标记做错的题</li>
-                            <li>在错题旁边简单记下"为什么错了"的猜测：
-                                <ul>
-                                    <li>是听不清某个词？</li>
-                                    <li>是没理解逻辑？</li>
-                                    <li>是反应速度慢？</li>
-                                </ul>
-                            </li>
-                        </ol>
-                    </div>
-
-                    <h3 style="color: #e74c3c; margin-top: 20px;">📌 第3步：听+看原文（10分钟）</h3>
-                    <div class="step-detail">
-                        <strong>目的：</strong> 找出听不懂的原因，是词汇？是句型？还是逻辑？
-                        <br><br>
-                        <strong>操作步骤：</strong>
-                        <ol>
-                            <li>打开该题的日文原文/脚本（大多数N1真题书籍都附带原文）</li>
-                            <li>同时播放音频</li>
-                            <li>一边听音频，一边看原文，用手指追踪</li>
-                            <li>当音频播放到某个词时，你的眼睛也看到那个词</li>
-                            <li>标记：
-                                <ul>
-                                    <li>🔴 红笔标记：听不清的词（发音不熟，听模糊了）</li>
-                                    <li>🟡 黄笔标记：陌生的词（这个词不认识）</li>
-                                    <li>🟢 绿笔标记：复杂的句型（听懂词但没理解句子）</li>
-                                </ul>
-                            </li>
-                            <li>完成一遍后，清点标记了几个</li>
-                        </ol>
-                        <br>
-                        <strong>为什么这一步很重要？</strong>
-                        <p>这一步把"听不懂"拆分成三种类型。后续的学习就有针对性：</p>
-                        <ul>
-                            <li>听不清 → 需要反复听+跟读</li>
-                            <li>陌生词 → 需要查字典+记忆</li>
-                            <li>复杂句型 → 需要理解语法+逻辑</li>
-                        </ul>
-                    </div>
-
-                    <h3 style="color: #e74c3c; margin-top: 20px;">📌 第4步：查生词（3分钟）</h3>
-                    <div class="step-detail">
-                        <strong>目的：</strong> 把陌生词的含义搞清楚，写进生词本
-                        <br><br>
-                        <strong>操作步骤：</strong>
-                        <ol>
-                            <li>整理出第3步标记的"陌生词"列表</li>
-                            <li>逐个查字典或词汇表：
-                                <ul>
-                                    <li>日文词汇</li>
-                                    <li>中文含义（记主要含义，不需要记所有释义）</li>
-                                    <li>原文中这个词的具体用法/例句</li>
-                                </ul>
-                            </li>
-                            <li>把这些词写进**听力专用生词本**：
-                                <table class="time-table">
-                                    <tr>
-                                        <th>日文</th>
-                                        <th>假名</th>
-                                        <th>中文</th>
-                                        <th>来自题目</th>
-                                    </tr>
-                                    <tr>
-                                        <td>例：緊張</td>
-                                        <td>きんちょう</td>
-                                        <td>紧张</td>
-                                        <td>2020/6 問題1</td>
-                                    </tr>
-                                </table>
-                            </li>
-                            <li>重点：<strong>标记这个词的发音！</strong>
-                                <br>因为你下次听到这个词时，是用耳朵，不是用眼睛</li>
-                        </ol>
-                    </div>
-
-                    <h3 style="color: #e74c3c; margin-top: 20px;">📌 第5步：跟读（5分钟）</h3>
-                    <div class="step-detail">
-                        <strong>目的：</strong> 改善发音和语感，适应日语的语速和语调
-                        <br><br>
-                        <strong>操作步骤：</strong>
-                        <ol>
-                            <li>打开日文原文/脚本</li>
-                            <li>播放音频，<strong>大声朗读</strong>（注意：是大声！不是小声）
-                                <ul>
-                                    <li>大声说话能激活更多脑区</li>
-                                    <li>你能听到自己的发音，便于改正</li>
-                                    <li>这是"影子跟读"的前身</li>
-                                </ul>
-                            </li>
-                            <li>追求：
-                                <ul>
-                                    <li>发音接近原音</li>
-                                    <li>语速跟上原音</li>
-                                    <li>语调模仿原音（日语有音高变化）</li>
-                                </ul>
-                            </li>
-                            <li><strong>跟读2-3遍</strong>
-                                <ul>
-                                    <li>第1遍：可能会卡顿，很多地方跟不上</li>
-                                    <li>第2遍：开始能跟上节奏</li>
-                                    <li>第3遍：基本流畅，接近原音</li>
-                                </ul>
-                            </li>
-                        </ol>
-                        <br>
-                        <strong>常见错误：</strong>
-                        <ul>
-                            <li>❌ 小声跟读 → 效果大幅降低</li>
-                            <li>❌ 跟读一遍就停 → 一遍无法改善发音</li>
-                            <li>❌ 边跟读边纠正发音 → 打破了连贯性</li>
-                        </ul>
-                    </div>
-
-                    <h3 style="color: #e74c3c; margin-top: 20px;">📌 第6步：复听（5分钟）</h3>
-                    <div class="step-detail">
-                        <strong>目的：</strong> 验证精听效果，检验自己是否真的理解了
-                        <br><br>
-                        <strong>操作步骤：</strong>
-                        <ol>
-                            <li><strong>合上原文！不看任何文字</strong></li>
-                            <li>再播放一遍同一段音频</li>
-                            <li>这次只需听，不需做题</li>
-                            <li>感受：
-                                <ul>
-                                    <li>比第1步听得清楚了吗？</li>
-                                    <li>能更快理解意思吗？</li>
-                                    <li>有没有听懂第3步标记的陌生词？</li>
-                                </ul>
-                            </li>
-                            <li>如果还是有听不清的部分，标记记录，纳入下一轮复习</li>
-                        </ol>
-                        <br>
-                        <strong>预期效果对比：</strong>
-                        <table class="time-table">
-                            <tr>
-                                <th>阶段</th>
-                                <th>理解程度</th>
-                                <th>体感</th>
-                            </tr>
-                            <tr>
-                                <td>第1步（初听）</td>
-                                <td>50-60%</td>
-                                <td>听不清，反应慢</td>
-                            </tr>
-                            <tr>
-                                <td>第6步（复听）</td>
-                                <td>80-90%</td>
-                                <td>基本听清，理解迅速</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- 影子跟读三遍法 -->
-                <div class="guide-section shadowing">
-                    <h3>第二部分：影子跟读三遍法（从第2周开始）</h3>
-                    <p>
-                        <strong>什么是影子跟读？</strong>
-                        <br>
-                        播放日语音频 → 同时大声朗读日文 → 追求和原音一样的速度、语调、节奏
-                        <br>你就像音频的"影子"，紧紧跟着原音说话。
-                    </p>
-
-                    <div class="warning-box">
-                        <strong>⚠️ 重要提醒：</strong>
-                        <br>
-                        • 影子跟读<strong>必须大声说话</strong>（不是小声，也不是默读）
-                        <br>
-                        • 影子跟读是<strong>实时跟读</strong>（不是听完再说，而是同时说）
-                        <br>
-                        • 影子跟读<strong>第1遍可看原文</strong>，第2遍开始不看原文
-                        <br>
-                        • 跟不上也要继续，不要暂停纠正
-                    </div>
-
-                    <h3 style="color: #f39c12; margin-top: 20px;">📌 影子跟读的三遍法详解</h3>
-
-                    <h4 style="color: #f39c12; margin-top: 15px;">第1遍：热身（5分钟）</h4>
-                    <div class="step-detail">
-                        <strong>特点：可以看原文，小声跟读</strong>
-                        <br><br>
-                        <strong>操作步骤：</strong>
-                        <ol>
-                            <li>打开日文原文</li>
-                            <li>播放音频</li>
-                            <li>边看原文，边小声跟读</li>
-                            <li>目的：让大脑和嘴巴适应日语的速度</li>
-                            <li>不要求准确，只是"混个脸熟"</li>
-                        </ol>
-                        <br>
-                        <strong>预期效果：</strong> 能跟上30-50%，经常掉队，这是正常的
-                    </div>
-
-                    <h4 style="color: #f39c12; margin-top: 15px;">第2遍：正式跟读（5分钟）</h4>
-                    <div class="step-detail">
-                        <strong>特点：不看原文，大声跟读，这是最关键的一遍</strong>
-                        <br><br>
-                        <strong>操作步骤：</strong>
-                        <ol>
-                            <li><strong>关闭原文！这是关键！</strong></li>
-                            <li>播放音频</li>
-                            <li><strong>大声跟读</strong>（不是小声！）</li>
-                            <li>尽量跟上原音的：
-                                <ul>
-                                    <li>速度（不要自己放慢）</li>
-                                    <li>发音（尽量像）</li>
-                                    <li>语调（日语的声调变化）</li>
-                                </ul>
-                            </li>
-                            <li>跟不上的词先听，继续往下说（不要暂停纠正）</li>
-                            <li>整段完成后，无需立刻回放</li>
-                        </ol>
-                        <br>
-                        <strong>为什么第2遍不能看原文？</strong>
-                        <ul>
-                            <li>考试时听力也是听，看不到原文</li>
-                            <li>这样才能训练"听到就反应"的能力</li>
-                            <li>模拟考试环境</li>
-                        </ul>
-                        <br>
-                        <strong>预期效果：</strong> 能跟上60-70%，发音有误，但基本能跟上节奏
-                    </div>
-
-                    <h4 style="color: #f39c12; margin-top: 15px;">第3遍：挑战（5分钟）</h4>
-                    <div class="step-detail">
-                        <strong>特点：追求"质量"，发音和速度都要接近原音</strong>
-                        <br><br>
-                        <strong>操作步骤：</strong>
-                        <ol>
-                            <li>继续不看原文</li>
-                            <li>播放音频（可考虑用0.9倍速，给大脑一个缓冲）</li>
-                            <li>这一遍重点不是"跟上"，而是"跟好"</li>
-                            <li>发音更清晰，语调更相似，速度更匹配</li>
-                            <li>完成一遍</li>
-                        </ol>
-                        <br>
-                        <strong>关于倍速调节：</strong>
-                        <ul>
-                            <li>第1周：可用0.9倍速第3遍（降难度）</li>
-                            <li>第2周起：争取用原速（1.0倍速）</li>
-                            <li>目的：逐渐适应原速</li>
-                        </ul>
-                        <br>
-                        <strong>预期效果：</strong> 能跟上75-80%，发音接近原音，基本流畅
-                    </div>
-
-                    <h3 style="color: #f39c12; margin-top: 20px;">📌 影子跟读的四个阶段预期</h3>
-                    <div class="step-detail">
-                        <table class="time-table">
-                            <tr>
-                                <th>阶段</th>
-                                <th>周数</th>
-                                <th>预期进度</th>
-                                <th>能跟上%</th>
-                                <th>体感</th>
-                            </tr>
-                            <tr>
-                                <td>入门期</td>
-                                <td>第1-2周</td>
-                                <td>很难跟上，经常掉队</td>
-                                <td>50-70%</td>
-                                <td>吃力，很累</td>
-                            </tr>
-                            <tr>
-                                <td>适应期</td>
-                                <td>第3-4周</td>
-                                <td>能跟上大部分，偶有掉队</td>
-                                <td>70-80%</td>
-                                <td>有点吃力</td>
-                            </tr>
-                            <tr>
-                                <td>流畅期</td>
-                                <td>第5-8周</td>
-                                <td>基本流畅，只有极少掉队</td>
-                                <td>80-90%</td>
-                                <td>轻松，接近原音</td>
-                            </tr>
-                            <tr>
-                                <td>精通期</td>
-                                <td>第9-10周</td>
-                                <td>完全跟上，几乎听不出是跟读</td>
-                                <td>90-95%</td>
-                                <td>很轻松，享受过程</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-                        <!-- 分阶段说明 -->
-                <div class="guide-section stages">
-                    <h3>第三部分：听力四个阶段的学习安排</h3>
-
-                    <h4 style="color: #27ae60; margin-top: 15px;">阶段一：精听期（10月1日-10月31日）</h4>
-                    <div class="step-detail">
-                        <strong>目标：</strong> 掌握精听六步法，建立听力基础
-                        <br><br>
-                        <strong>每日安排：</strong>
-                        <ul>
-                            <li>精听时间：60分钟/天</li>
-                            <li>精听任务：每天精听1道题目（用六步法完整执行）</li>
-                            <li>影子跟读：10-15分钟（用前面精听过的题目）</li>
-                            <li>真题套次：2020/6、2021/7、2021/12、2022/7</li>
-                        </ul>
-                        <br>
-                        <strong>预期效果：</strong>
-                        <ul>
-                            <li>理解精听六步法的逻辑</li>
-                            <li>能快速定位听不懂的原因（词汇/逻辑/速度）</li>
-                            <li>影子跟读入门，适应日语语速</li>
-                        </ul>
-                    </div>
-
-                    <h4 style="color: #27ae60; margin-top: 15px;">阶段二：强化期（11月1日-11月15日）</h4>
-                    <div class="step-detail">
-                        <strong>目标：</strong> 精听精度提升，影子跟读从入门进入适应期
-                        <br><br>
-                        <strong>每日安排：</strong>
-                        <ul>
-                            <li>精听时间：60分钟/天（新题精听）</li>
-                            <li>影子跟读：40分钟/天（显著增加）
-                                <ul>
-                                    <li>前20分钟：跟读新题（三遍法）</li>
-                                    <li>后20分钟：跟读前面学过的题（巩固）</li>
-                                </ul>
-                            </li>
-                            <li>真题套次：2022/12、2023/7、2023/12、2024/7</li>
-                            <li>重点：問題4（即时应答）和問題5（综合理解）的题型突破</li>
-                        </ul>
-                        <br>
-                        <strong>预期效果：</strong>
-                        <ul>
-                            <li>精听速度加快，从30分钟/题降到20分钟/题</li>
-                            <li>影子跟读能跟上70-80%的内容</li>
-                            <li>对日语音韵的敏感度大幅提升</li>
-                        </ul>
-                    </div>
-
-                    <h4 style="color: #27ae60; margin-top: 15px;">阶段三：模拟期（11月16日-12月3日）</h4>
-                    <div class="step-detail">
-                        <strong>目标：</strong> 适应考试节奏，达到考场水平
-                        <br><br>
-                        <strong>每日安排：</strong>
-                        <ul>
-                            <li>完整听力模拟：55分钟/天
-                                <ul>
-                                    <li>問題1～5一口气做完，不暂停</li>
-                                    <li>模拟考试环境</li>
-                                </ul>
-                            </li>
-                            <li>影子跟读：30分钟/天（维持阶段）
-                                <ul>
-                                    <li>主要是复习已学内容，不学新题</li>
-                                    <li>目标是保持听力热度</li>
-                                </ul>
-                            </li>
-                            <li>真题套次：2024/12、2025/7、2025/12</li>
-                            <li>错题精听与复盘</li>
-                        </ul>
-                        <br>
-                        <strong>预期效果：</strong>
-                        <ul>
-                            <li>55分钟内完成整套听力的能力确立</li>
-                            <li>影子跟读流畅期到精通期的过渡</li>
-                            <li>考场上的听力焦虑大幅降低</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 常见问题 -->
-                <div class="guide-section">
-                    <h3>第四部分：听力学习常见问题解答</h3>
-
-                    <h4 style="margin-top: 15px;"><strong>Q1: 为什么我用精听六步法，还是听不懂？</strong></h4>
-                    <div class="step-detail">
-                        <strong>A:</strong>
-                        <ul>
-                            <li>原因1：<strong>词汇量不足</strong> → 听到词但不认识意思 → 需要背更多单词</li>
-                            <li>原因2：<strong>对发音不熟</strong> → 认识词但听不出 → 需要加强跟读</li>
-                            <li>原因3：<strong>语法逻辑不懂</strong> → 听出所有词但理解不了句子 → 需要理解日语语法</li>
-                            <li>原因4：<strong>才精听一两次</strong> → 记忆还没建立 → 需要按第5、6步多复习</li>
-                        </ul>
-                    </div>
-
-                    <h4 style="margin-top: 15px;"><strong>Q2: 影子跟读真的有效果吗？从什么时候能看到进步？</strong></h4>
-                    <div class="step-detail">
-                        <strong>A:</strong>
-                        <ul>
-                            <li>第1周：体感不明显，很吃力</li>
-                            <li>第2周：开始能跟上一些，感受到进步</li>
-                            <li>第3-4周：明显进步，能跟上70-80%</li>
-                            <li>第5-8周：已成为常态，轻松流畅</li>
-                        </ul>
-                        <br>
-                        <strong>科学依据：</strong> 根据语言学研究，每个词大脑需要接触7-17次才能形成长期记忆。影子跟读通过"听+说+记忆"的组合，可以加速这个过程。
-                    </div>
-
-                    <h4 style="margin-top: 15px;"><strong>Q3: 精听和影子跟读哪个更重要？</strong></h4>
-                    <div class="step-detail">
-                        <strong>A: 都很重要，但阶段不同：</strong>
-                        <ul>
-                            <li><strong>精听六步法</strong>：是基础，帮你理解"为什么听不懂"</li>
-                            <li><strong>影子跟读</strong>：是加速器，帮你改善听力反应速度和发音感知</li>
-                        </ul>
-                        <br>
-                        <strong>比例建议：</strong>
-                        <ul>
-                            <li>10月：精听60%，影子跟读40%</li>
-                            <li>11月：精听40%，影子跟读60%</li>
-                            <li>12月：精听（模拟）50%，影子跟读（维持）50%</li>
-                        </ul>
-                    </div>
-
-                    <h4 style="margin-top: 15px;"><strong>Q4: 题目做错了，是继续精听还是放弃这道题？</strong></h4>
-                    <div class="step-detail">
-                        <strong>A: 一定要继续精听！做错的题更要精听。</strong>
-                        <ul>
-                            <li>做错说明这道题有**你没有掌握的内容**</li>
-                            <li>通过精听六步法，你能找出具体是哪里没懂</li>
-                            <li>然后针对性地改进（背词、学语法、多听）</li>
-                            <li>这就是"查缺补漏"的过程，非常高效</li>
-                        </ul>
-                    </div>
-
-                    <h4 style="margin-top: 15px;"><strong>Q5: 为什么要先背完语法再听力？还是要同时进行？</strong></h4>
-                    <div class="step-detail">
-                        <strong>A: 应该同时进行，但优先级不同。</strong>
-                        <ul>
-                            <li>听力和语法在N1备考中是相互促进的</li>
-                            <li>你在精听中会遇到N1语法，加深记忆</li>
-                            <li>你在学语法时能理解为什么某些句子这样说</li>
-                        </ul>
-                        <br>
-                        <strong>实际计划中：</strong>
-                        <ul>
-                            <li>语法学习不因听力而停止</li>
-                            <li>听力学习也从第1周就开始</li>
-                            <li>两者在备考期间并行推进</li>
-                        </ul>
-                    </div>
-
-                    <h4 style="margin-top: 15px;"><strong>Q6: 我的听力时间分配是不是不够？12套真题够吗？</strong></h4>
-                    <div class="step-detail">
-                        <strong>A: 12套真题 + 充分的精听训练是够的。</strong>
-                        <ul>
-                            <li>每套真题用精听六步法完整执行，约需4-5小时</li>
-                            <li>12套 × 4.5小时 ≈ 54小时</li>
-                            <li>加上影子跟读30小时，总共约80-90小时</li>
-                            <li>这个量级足以把听力从N2的40%提升到N1的50-60%</li>
-                        </ul>
-                        <br>
-                        <strong>关键：</strong> 不是题量多，而是**每道题精听到位**</li>
-                    </div>
-
-                    <h4 style="margin-top: 15px;"><strong>Q7: 如果某道题精听了5遍还是听不懂怎么办？</strong></h4>
-                    <div class="step-detail">
-                        <strong>A: 这说明底层基础还有问题，不是听力问题。</strong>
-                        <ul>
-                            <li>很可能是<strong>单词量不够</strong>：听到词但不认识</li>
-                            <li>或者是<strong>语法没学过</strong>：听出词但理不清逻辑</li>
-                        </ul>
-                        <br>
-                        <strong>解决方案：</strong>
-                        <ul>
-                            <li>把这道题的原文打印下来，用红笔标出所有生词</li>
-                            <li>查字典，全部记进生词本</li>
-                            <li>用红笔标出所有N1语法点，逐条查阅大纲</li>
-                            <li>然后再做一遍精听</li>
-                        </ul>
-                        <br>
-                        <strong>记住：</strong> 听不懂 = 知识有缺口，不是听力天赋问题
-                    </div>
-                </div>
-
-                <div class="success-box">
-                    <strong>✅ 最后总结：听力学习的黄金法则</strong>
-                    <br><br>
-                    1. <strong>精听六步法是基础</strong>，每道题都要用六步完整执行，不能跳步
-                    <br>
-                    2. <strong>影子跟读是加速器</strong>，第2周开始加强，目标是让听力从"理解"变成"反应"
-                    <br>
-                    3. <strong>词汇和语法是基石</strong>，如果听不懂一定先查词和语法，不是反复听就能懂
-                    <br>
-                    4. <strong>坚持最重要</strong>，听力提升不是一蹴而就，需要10周左右才能从适应期进入流畅期
-                    <br>
-                    5. <strong>做错的题最珍贵</strong>，因为它会告诉你具体的弱点在哪里
-                </div>
-      <!-- ====== 听力正文结束 ====== -->
+  <div class="nav">
+    <div class="left">
+      <div class="t1">选择日期快速定位</div>
+      <div class="t2">提示：任务打钩后不会丢失（保存在浏览器）</div>
+    </div>
+    <div class="right">
+      <select id="dateSelect"></select>
     </div>
   </div>
 
-  <div class="footer">
-    <p>💡 每天坚持打卡，记录学习进度。你的努力终将开花结果！</p>
-    <p>© N1备考打卡系统</p>
-  </div>
-</div>
+  <div class="dayList" id="dayList"></div>
 
-<!-- 指南弹窗 -->
-<div class="guide-modal" id="guideModal">
-  <div class="guide-content">
-    <span class="close-guide" onclick="closeGuide()">&times;</span>
-    <div id="guideText"></div>
+  <div class="foot">
+    <div class="badge"><span class="dot"></span>使用约定（与网页任务文字一致）</div>
+    <div style="margin-top:10px;">
+      1）听写：打开你本地备忘录/纸质听写清单，使用“<b>昨天</b>生成的听写词”完成听写纠错。然后把今天听力里新出现且听不清的词追加到“<b>明天</b>听写清单”。<br/>
+      2）阅读生词：把不认识的词分级加入 APP 自定义词书；命中《绿宝书N1必考词》→优先复习；不命中→加入阅读补充复习词书。<br/>
+      3）语法：语法课日以“课堂笔记→当场接续/含义口述→下方语法自测”闭环；非课日按同样闭环“学习/复习/强化”。<br/>
+      4）如当天做题/听力有超时：按任务提示的优先级“先保证语言知识与阅读精读错因，再补二刷”。（但请尽量严格按参考时间完成。）
+    </div>
   </div>
 </div>
 
 <script>
-  // ==================== 日期工具（用 UTC，彻底修复“前一天/后一天没反应”） ====================
-  const PLAN_START = '2026-09-14';
-  const PLAN_END = '2026-12-04';
-
-  function parseDateStrUTC(dateStr){
-    const [y,m,d] = dateStr.split('-').map(Number);
-    return new Date(Date.UTC(y, m-1, d));
-  }
-
-  function formatDateStrUTC(dt){
-    const y = dt.getUTCFullYear();
-    const m = String(dt.getUTCMonth()+1).padStart(2,'0');
-    const d = String(dt.getUTCDate()).padStart(2,'0');
-    return `${y}-${m}-${d}`;
-  }
-
-  function addDaysUTC(dateStr, delta){
-    const dt = parseDateStrUTC(dateStr);
-    dt.setUTCDate(dt.getUTCDate() + delta);
-    return formatDateStrUTC(dt);
-  }
-
-  function clampDateStr(dateStr){
-    if (dateStr < PLAN_START) return PLAN_START;
-    if (dateStr > PLAN_END) return PLAN_END;
-    return dateStr;
-  }
-
-  function formatDateLocalFromStr(dateStr){
-    const [y,m,d] = dateStr.split('-').map(Number);
-    const dt = new Date(y, m-1, d); // local time
-    const options = { year:'numeric', month:'2-digit', day:'2-digit', weekday:'long' };
-    return dt.toLocaleDateString('zh-CN', options);
-  }
-
-  // ==================== 初始化日期 ====================
-  let currentDate = PLAN_START;
-
-  // ==================== 阶段固定时段 ====================
-  const STAGE1_SLOTS = [
-    { label: '08:00-08:30', minutes: 30 },
-    { label: '20:00-22:00', minutes: 120 }
-  ]; // 150 分钟
-
-  const STAGE2_SLOTS = [
-    { label: '10:00-12:00', minutes: 120, group:'new' },
-    { label: '13:00-15:00', minutes: 120, group:'new' },
-    { label: '15:30-17:30', minutes: 120, group:'review' }
-  ]; // 360 分钟
-
-  const STAGE1_TOTAL_MINUTES = 150;
-  const STAGE2_TOTAL_MINUTES = 360;
-
-  // ==================== 生成计划数据 ====================
-  const fullScheduleData = generateCompleteSchedule();
-  const TOTAL_PLAN_DAYS = Object.keys(fullScheduleData).length;
-
-  function generateCompleteSchedule(){
-    const schedule = {};
-    let d = parseDateStrUTC(PLAN_START);
-    const end = parseDateStrUTC(PLAN_END);
-
-    while (d <= end){
-      const dateStr = formatDateStrUTC(d);
-      const totalDays = Math.floor((d - parseDateStrUTC(PLAN_START)) / 86400000) + 1;
-
-      const dayOfWeek = d.getUTCDay();
-      const dayName = ['周日','周一','周二','周三','周四','周五','周六'][dayOfWeek];
-      const isWeekend = dayOfWeek === 6;
-
-      const dayOfMonth = d.getUTCDate();
-      const monthNum = d.getUTCMonth() + 1;
-
-      schedule[dateStr] = generateDayPlan(dateStr, totalDays, monthNum, dayOfMonth, isWeekend, dayName);
-      d.setUTCDate(d.getUTCDate()+1);
-    }
-    return schedule;
-  }
-
-  function generateDayPlan(dateStr, totalDays, monthNum, dayOfMonth, isWeekend, dayName){
-    const tasks = [];
-    const isStageOne = totalDays <= 17; // 9/14-9/30
-    const stageOneDay = isStageOne ? totalDays : null;
-    const stageTwoDay = !isStageOne ? totalDays - 17 : null;
-
-    if (isStageOne){
-      const wordStart = (stageOneDay - 1) * 50 + 1;
-      const wordEnd = stageOneDay * 50;
-
-      const wordMinutes = (stageOneDay === 1) ? 30 : 50;
-
-      tasks.push(createTask(
-        `📖 单词学习：激活必考词第${wordStart}-${wordEnd}词`,
-        `在识日APP中激活今日新词（约${wordEnd-wordStart+1}词），按“听发音→看中文→记例句”。`,
-        getWordGuide(),
-        wordMinutes,
-        'new'
-      ));
-
-      if (stageOneDay > 1){
-        tasks.push(createTask(
-          `🔄 APP复习：复习已学词汇`,
-          `完成识日APP推送的复习任务（前一天新学的词今天进入复习栏）。`,
-          getAppReviewGuide(true),
-          20,
-          'review'
-        ));
-      } else {
-        tasks.push(createTask(
-          `⏳ 今日无APP复习任务（首日补巩固）`,
-          `首日没有复习栏。用40分钟再过一遍今日新学词：遮住中文→回忆→再确认。`,
-          getAppReviewGuide(false),
-          40,
-          'review'
-        ));
-      }
-
-      tasks.push(createTask(
-        `📚 语法学习：N1语法大纲 第${stageOneDay}单元`,
-        `学习/复习语法大纲内容，做例句与口头复述。`,
-        getGrammarGuide(),
-        50,
-        'new'
-      ));
-
-      const isReadingDay = stageOneDay % 2 === 1;
-      const readingPart = Math.ceil(stageOneDay / 2);
-
-      if (isReadingDay){
-        tasks.push(createTask(
-          `📖 阅读精读：2019/12真题（短篇）第${readingPart}篇`,
-          `阅读精读四步法：通读→做题→精读→复读。`,
-          getReadingGuide(),
-          30,
-          'new'
-        ));
-      } else {
-        tasks.push(createTask(
-          `🎧 听力精听：2019/12真题 听力题目`,
-          `使用听力精听六步法（精听1题）。`,
-          getListeningShortGuide(),
-          30,
-          'new'
-        ));
-      }
-
-      // 兜底：确保150分钟
-      const sumMin = tasks.reduce((s,t)=>s+(t.minutes||0),0);
-      if (sumMin < STAGE1_TOTAL_MINUTES){
-        tasks.push(createTask(
-          `🧠 机动复盘/整理`,
-          `把当天错题点、不会的词句做快速整理与复盘（补足时间）。`,
-          getOptionalGuide(),
-          STAGE1_TOTAL_MINUTES - sumMin,
-          'review'
-        ));
-      }
-
-      const timePlan = buildTimePlanStage1(tasks);
-      return {
-        dateStr,
-        dayName: isWeekend ? '周六（休息日）' : dayName,
-        stage: `阶段一第${stageOneDay}天`,
-        isWeekend,
-        tasks,
-        timePlan
-      };
-    } else {
-      // 阶段二：每天6小时 = 360分钟
-      let dailyWords = 0;
-      if (monthNum === 10) dailyWords = 50;
-      else if (monthNum === 11) dailyWords = (dayOfMonth <= 14) ? 20 : 10;
-      else if (monthNum === 12) dailyWords = (dayOfMonth <= 2) ? 10 : 0;
-
-      const wordMinutes = (dailyWords === 50) ? 60 :
-                           (dailyWords === 20) ? 45 :
-                           (dailyWords === 10) ? 35 : 30;
-
-      tasks.push(createTask(
-        dailyWords > 0 ? `📖 单词学习：激活必考词（新学${dailyWords}词）`
-                         : `📖 单词复习：仅APP复习（无新学）`,
-        `在识日APP中完成今日词汇学习/复习（每天约${wordMinutes}分钟）。`,
-        getWordGuide(),
-        wordMinutes,
-        dailyWords === 0 ? 'review' : 'new'
-      ));
-
-      tasks.push(createTask(
-        `🔄 APP复习：复习已学词汇（上限100词）`,
-        `完成识日APP推送的复习任务（巩固）。`,
-        getAppReviewGuide(true),
-        45,
-        'review'
-      ));
-
-      tasks.push(createTask(
-        `📚 语法学习/复习：按阶段调整`,
-        `语法重点做卡片+口头复述，巩固听力阅读常见结构。`,
-        getGrammarGuide(),
-        50,
-        'new'
-      ));
-
-      const readingMinutes = (stageTwoDay <= 31) ? 95 : ((stageTwoDay <= 46) ? 120 : 80);
-      tasks.push(createTask(
-        `📖 阅读训练：${readingMinutes}分钟`,
-        `精读/限时精读/模拟冲刺（按阶段）。`,
-        getReadingGuide(),
-        readingMinutes,
-        'new'
-      ));
-
-      const listeningMinutes = (stageTwoDay <= 31) ? 80 : ((stageTwoDay <= 46) ? 60 : 55);
-      tasks.push(createTask(
-        `🎧 听力训练：${listeningMinutes}分钟（精听/模拟）`,
-        `按阶段完成听力精听或限时训练。`,
-        getListeningShortGuide(),
-        listeningMinutes,
-        'new'
-      ));
-
-      if (stageTwoDay > 7){
-        const shadowMinutes = (stageTwoDay <= 31) ? 15 : ((stageTwoDay <= 46) ? 40 : 30);
-        tasks.push(createTask(
-          `🎧 影子跟读：${shadowMinutes}分钟（巩固）`,
-          `三遍跟读法：热身→正式（不看）→挑战（追质量）。`,
-          getShadowGuideShort(),
-          shadowMinutes,
-          'review'
-        ));
-      }
-
-      const coreSum = tasks.reduce((s,t)=>s+(t.minutes||0),0);
-      const remain = STAGE2_TOTAL_MINUTES - coreSum;
-      if (remain > 0){
-        tasks.push(createTask(
-          `🧠 机动复盘/错题整理（补足时长）`,
-          `根据当天错题/不会的词句做快速复盘（补足6小时）。`,
-          getOptionalGuide(),
-          remain,
-          'review'
-        ));
-      }
-
-      const timePlan = buildTimePlanStage2(tasks);
-      return {
-        dateStr,
-        dayName: isWeekend ? '周六（休息日）' : dayName,
-        stage: `阶段二第${stageTwoDay}天`,
-        isWeekend,
-        tasks,
-        timePlan
-      };
-    }
-  }
-
-  function createTask(title, desc, guide, minutes, bucket){
-    return { title, desc, guide, minutes, bucket };
-  }
-
-  // ==================== 时间分配：阶段一固定按顺序塞进两个时段 ====================
-  function buildTimePlanStage1(tasks){
-    const slots = STAGE1_SLOTS.map(s=>({ label:s.label, minutes:s.minutes, segments:[] }));
-    let slotIndex = 0;
-
-    const remaining = slots.map(s=>s.minutes);
-    tasks.forEach((t, taskIndex)=>{
-      let m = t.minutes || 0;
-      while (m > 0 && slotIndex < slots.length){
-        const alloc = Math.min(m, remaining[slotIndex]);
-        if (alloc > 0){
-          slots[slotIndex].segments.push({ type:'task', taskIndex, minutes: alloc });
-          remaining[slotIndex] -= alloc;
-          m -= alloc;
-        }
-        if (remaining[slotIndex] === 0) slotIndex++;
-      }
-    });
-
-    // 理论上刚好满
-    return slots;
-  }
-
-  // ==================== 时间分配：阶段二最后一段偏巩固 ====================
-  function buildTimePlanStage2(tasks){
-    const slots = STAGE2_SLOTS.map(s=>({ label:s.label, minutes:s.minutes, segments:[], group:s.group }));
-    const remaining = slots.map(s=>s.minutes);
-
-    const reviewIndices = [];
-    const newIndices = [];
-    tasks.forEach((t, idx)=>{
-      const b = t.bucket || 'new';
-      if (b === 'review') reviewIndices.push(idx);
-      else newIndices.push(idx);
-    });
-
-    // 先把 review 尽量塞到 slot3(索引2)，不够再溢出到前面
-    function allocate(taskIndices, slotOrder){
-      let ptr = 0;
-      for (const ti of taskIndices){
-        let m = tasks[ti].minutes || 0;
-        while (m > 0){
-          while (ptr < slotOrder.length && remaining[slotOrder[ptr]] <= 0) ptr++;
-          if (ptr >= slotOrder.length) return;
-
-          const si = slotOrder[ptr];
-          const alloc = Math.min(m, remaining[si]);
-          if (alloc > 0){
-            slots[si].segments.push({ type:'task', taskIndex:ti, minutes:alloc });
-            remaining[si] -= alloc;
-            m -= alloc;
-          }
-          if (remaining[si] === 0) ptr++;
-        }
-      }
-    }
-
-    allocate(reviewIndices, [2,1,0]); // 巩固优先最后段
-    allocate(newIndices, [0,1,2]);   // 新内容优先前两段
-
-    // （不另外填optional，因我们任务分钟是按360兜底补齐的）
-    return slots;
-  }
-
-  // ==================== 指南弹窗 ====================
-  function showGuide(guideText){
-    document.getElementById('guideText').innerHTML = guideText;
-    document.getElementById('guideModal').classList.add('show');
-  }
-  function closeGuide(){
-    document.getElementById('guideModal').classList.remove('show');
-  }
-
-  // ==================== 标签切换 ====================
-  function switchTab(tabName, btnEl){
-    document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.nav-tab-btn').forEach(b=>b.classList.remove('active'));
-    document.getElementById(tabName).classList.add('active');
-    if (btnEl) btnEl.classList.add('active');
-  }
-
-  // ==================== localStorage 任务状态 ====================
-  function getTaskStatus(taskKey){
-    const data = JSON.parse(localStorage.getItem('taskStatus') || '{}');
-    return data[taskKey] || false;
-  }
-  function toggleTask(taskKey){
-    const data = JSON.parse(localStorage.getItem('taskStatus') || '{}');
-    data[taskKey] = !data[taskKey];
-    localStorage.setItem('taskStatus', JSON.stringify(data));
-    generateSchedule(currentDate);
-  }
-
-  // ==================== 渲染 ====================
-  function renderTimeAllocation(dateStr, data){
-    const wrap = document.getElementById('timeAllocation');
-    wrap.innerHTML = '';
-
-    const plan = data.timePlan || [];
-    plan.forEach((slot)=>{
-      const slotDiv = document.createElement('div');
-      slotDiv.className = 'time-slot';
-
-      const title = document.createElement('div');
-      title.className = 'time-slot-title';
-      title.textContent = slot.label;
-      slotDiv.appendChild(title);
-
-      (slot.segments || []).forEach(seg=>{
-        const task = data.tasks[seg.taskIndex];
-        const taskKey = `${dateStr}-${seg.taskIndex}`;
-        const done = getTaskStatus(taskKey);
-
-        const item = document.createElement('div');
-        item.className = `time-slot-item ${done ? 'completed' : ''}`;
-        item.innerHTML = `
-          <span class="time-slot-left">${done ? '✅' : '⬜'} ${task ? task.title : '任务'}</span>
-          <span class="time-slot-min">${seg.minutes}分钟</span>
-        `;
-        slotDiv.appendChild(item);
-      });
-
-      wrap.appendChild(slotDiv);
-    });
-  }
-
-  function generateSchedule(dateStr){
-    const scheduleContainer = document.getElementById('scheduleContainer');
-    scheduleContainer.innerHTML = '';
-
-    const data = fullScheduleData[dateStr];
-    if (!data){
-      scheduleContainer.innerHTML = '<p class="no-data">此日期无计划数据</p>';
-      return;
-    }
-
-    // 时间分配
-    renderTimeAllocation(dateStr, data);
-
-    // 任务卡片
-    const cardDiv = document.createElement('div');
-    cardDiv.className = `schedule-card ${data.isWeekend ? 'weekend' : ''}`;
-
-    const headerDiv = document.createElement('div');
-    headerDiv.className = 'schedule-header';
-    headerDiv.textContent = `${data.dayName} - ${data.stage}`;
-    cardDiv.appendChild(headerDiv);
-
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'schedule-content';
-
-    data.tasks.forEach((task, taskIndex)=>{
-      const taskKey = `${dateStr}-${taskIndex}`;
-      const isCompleted = getTaskStatus(taskKey);
-
-      const taskItem = document.createElement('div');
-      taskItem.className = `task-item ${isCompleted ? 'completed' : ''}`;
-
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.className = 'task-checkbox';
-      checkbox.checked = isCompleted;
-      checkbox.dataset.minutes = Number(task.minutes || 0);
-      checkbox.onchange = () => toggleTask(taskKey);
-
-      const taskContent = document.createElement('div');
-      taskContent.className = 'task-content';
-
-      const taskTitle = document.createElement('div');
-      taskTitle.className = 'task-title';
-      taskTitle.textContent = task.title;
-
-      const taskDesc = document.createElement('div');
-      taskDesc.className = 'task-description';
-      taskDesc.textContent = task.desc;
-
-      taskContent.appendChild(taskTitle);
-      taskContent.appendChild(taskDesc);
-
-      if (Number(task.minutes || 0) > 0){
-        const taskTime = document.createElement('div');
-        taskTime.className = 'task-duration';
-        taskTime.textContent = `${task.minutes}分钟`;
-        taskContent.appendChild(taskTime);
-      }
-
-      if (task.guide){
-        const guideBtn = document.createElement('button');
-        guideBtn.className = 'guide-button';
-        guideBtn.textContent = '📖 查看指南';
-        guideBtn.onclick = (e)=>{ e.stopPropagation(); showGuide(task.guide); };
-        taskContent.appendChild(guideBtn);
-      }
-
-      taskItem.appendChild(checkbox);
-      taskItem.appendChild(taskContent);
-      contentDiv.appendChild(taskItem);
-    });
-
-    cardDiv.appendChild(contentDiv);
-    scheduleContainer.appendChild(cardDiv);
-
-    updateStats(dateStr);
-  }
-
-  function updateStats(){
-    const scheduleContainer = document.getElementById('scheduleContainer');
-    const checkboxes = scheduleContainer.querySelectorAll('.task-checkbox');
-
-    const totalTasks = checkboxes.length;
-    const completedTasks = Array.from(checkboxes).filter(cb=>cb.checked).length;
-
-    const totalMinutes = Array.from(checkboxes).reduce((s,cb)=>s+Number(cb.dataset.minutes||0),0);
-    const completedMinutes = Array.from(checkboxes).filter(cb=>cb.checked)
-      .reduce((s,cb)=>s+Number(cb.dataset.minutes||0),0);
-
-    const percent = totalMinutes > 0 ? (completedMinutes / totalMinutes * 100) : 0;
-
-    document.getElementById('totalTasks').textContent = totalTasks;
-    document.getElementById('completedTasks').textContent = completedTasks;
-    document.getElementById('completionRate').textContent = totalMinutes > 0 ? Math.round(percent)+'%' : '0%';
-
-    document.getElementById('completedProgressFill').style.width = totalMinutes > 0 ? percent+'%' : '0%';
-    document.getElementById('rateProgressFill').style.width = totalMinutes > 0 ? percent+'%' : '0%';
-    document.getElementById('totalProgressFill').style.width = '100%';
-
-    document.getElementById('todayTotalTasks').textContent = totalTasks;
-    document.getElementById('todayCompletedTasks').textContent = completedTasks;
-    document.getElementById('todayProgress').textContent = totalMinutes > 0 ? Math.round(percent)+'%' : '0%';
-
-    const remainingMinutes = Math.max(0, totalMinutes - completedMinutes);
-    if (totalMinutes <= 0) document.getElementById('estimatedTime').textContent = '-';
-    else if (remainingMinutes === 0) document.getElementById('estimatedTime').textContent = '已完成';
-    else {
-      const h = Math.floor(remainingMinutes/60);
-      const m = remainingMinutes%60;
-      document.getElementById('estimatedTime').textContent = `${h}小时${m}分钟`;
-    }
-
-    calculateConsecutiveDays();
-  }
-
-  function calculateConsecutiveDays(){
-    const data = JSON.parse(localStorage.getItem('taskStatus') || '{}');
-    let consecutiveDays = 0;
-
-    let checkDate = currentDate;
-    while (true){
-      const dateStr = checkDate;
-      const scheduleInfo = fullScheduleData[dateStr];
-      if (!scheduleInfo) break;
-
-      const taskKeys = scheduleInfo.tasks.map((_,i)=>`${dateStr}-${i}`);
-      const allCompleted = taskKeys.length > 0 && taskKeys.every(k=>data[k]);
-
-      if (!allCompleted) break;
-
-      consecutiveDays++;
-      checkDate = addDaysUTC(checkDate, -1);
-      if (checkDate < PLAN_START) break;
-    }
-
-    document.getElementById('consecutiveDays').textContent = consecutiveDays;
-    document.getElementById('consecutiveProgressFill').style.width =
-      Math.min(consecutiveDays / TOTAL_PLAN_DAYS * 100, 100) + '%';
-  }
-
-  // ==================== 日期切换（修复前一天/后一天） ====================
-  function updateDateDisplay(){
-    document.getElementById('dateSelector').value = currentDate;
-    document.getElementById('currentDateDisplay').textContent = formatDateLocalFromStr(currentDate);
-  }
-
-  function previousDate(){
-    currentDate = clampDateStr(addDaysUTC(currentDate, -1));
-    updateDateDisplay();
-    generateSchedule(currentDate);
-  }
-
-  function nextDate(){
-    currentDate = clampDateStr(addDaysUTC(currentDate, +1));
-    updateDateDisplay();
-    generateSchedule(currentDate);
-  }
-
-  function selectDate(){
-    const selected = document.getElementById('dateSelector').value;
-    if (selected && fullScheduleData[selected]){
-      currentDate = selected;
-      updateDateDisplay();
-      generateSchedule(currentDate);
-    }
-  }
-
-  function jumpToToday(){
-    const dt = new Date();
-    const y = dt.getFullYear();
-    const m = String(dt.getMonth()+1).padStart(2,'0');
-    const d = String(dt.getDate()).padStart(2,'0');
-    const todayStr = `${y}-${m}-${d}`;
-
-    currentDate = (fullScheduleData[todayStr] ? todayStr : PLAN_START);
-    updateDateDisplay();
-    generateSchedule(currentDate);
-  }
-
-  function resetAll(){
-    if (confirm('确定要重置所有进度吗？此操作无法撤销！')){
-      localStorage.removeItem('taskStatus');
-      generateSchedule(currentDate);
-    }
-  }
-
-  function exportData(){
-    const data = localStorage.getItem('taskStatus') || '{}';
-    const dataStr = JSON.stringify(JSON.parse(data), null, 2);
-    const blob = new Blob([dataStr], { type:'application/json' });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `N1备考数据-${new Date().toISOString().slice(0,10)}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-
-  window.onclick = function(e){
-    const modal = document.getElementById('guideModal');
-    if (e.target === modal) modal.classList.remove('show');
+(() => {
+  const startDate = new Date('2026-10-12T00:00:00+09:00');
+  const endDate   = new Date('2026-12-06T00:00:00+09:00');
+
+  const pad2 = n => String(n).padStart(2,'0');
+  const fmt = (d) => `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+  const cloneDate = d => new Date(d.getTime());
+
+  const dayOfWeekCN = (dow) => ['周日','周一','周二','周三','周四','周五','周六'][dow];
+
+  const isLectureDay = (d) => {
+    const dow = d.getDay(); //0 Sun
+    return dow === 1 || dow === 3 || dow === 5; // Mon/Wed/Fri
   };
 
-  // ==================== 简化的指南内容（不影响你后面粘贴“听力正文”） ====================
-  function getWordGuide(){
-    return `
-      <h2 style="color:#667eea;margin-bottom:10px;">📖 单词学习建议（简版）</h2>
-      <ol style="margin-left:20px;line-height:1.8;">
-        <li>听发音→看中文</li>
-        <li>记核心含义+常见例句</li>
-        <li>在APP复习循环里坚持过一轮</li>
-      </ol>`;
+  const isSaturdayBefore13 = (d) => {
+    const dow = d.getDay();
+    // 这里是整天网页，所以“周六13点前不学习”在任务生成上体现为：周六我们只生成 13:00 后任务
+    return dow === 6; // Saturday
+  };
+
+  // 词汇新学目标（从 10/12 到 10/31；以 APP 推送为准，不够自动转复习）
+  const newTargets = {
+    '2026-10-12':75,'2026-10-13':75,'2026-10-14':75,'2026-10-15':75,'2026-10-16':75,
+    '2026-10-17':70,'2026-10-18':70,'2026-10-19':70,'2026-10-20':70,'2026-10-21':70,
+    '2026-10-22':75,'2026-10-23':75,'2026-10-24':75,'2026-10-25':75,'2026-10-26':75,
+    '2026-10-27':65,'2026-10-28':65,'2026-10-29':65,'2026-10-30':65,'2026-10-31':65
+  };
+
+  const listeningSets = [
+    '2017/07','2017/12','2018/07','2018/12','2019/07','2019/12','2020/12',
+    '2021/07','2021/12','2022/07','2022/12','2023/07','2023/12',
+    '2024/07','2024/12','2025/07','2025/12'
+  ];
+
+  // 阅读阶段（按任务生成器：短篇->中篇->长篇/对比/信息查找）
+  const readingSetsShort = ['2022/07','2022/12','2023/07','2023/12','2024/07','2024/12','2025/07']; // 28天=7套*4短篇
+  const readingSetsMid   = ['2025/12','2025/07','2024/12','2024/07','2023/12','2023/07'];          // 18天=6套*3中篇
+  const readingSetsLong  = ['2025/12','2024/12','2023/12','2022/12','2025/07','2024/07','2023/07']; // 10天循环
+
+  const longQCycle = [
+    '问题10（长篇）','问题11（ab对比）','问题12（长篇）','问题13（信息查找）'
+  ];
+
+  // 语法：20单元三轮（60个“主语法槽”）
+  const grammarQueue = [];
+  for (let r=0;r<3;r++){
+    for (let u=1;u<=20;u++) grammarQueue.push(u);
   }
-  function getAppReviewGuide(){
-    return `
-      <h2 style="color:#667eea;margin-bottom:10px;">🔄 APP复习建议（简版）</h2>
-      <p style="line-height:1.8;">用遮住法：看日文→猜中文→再确认。重点复习容易错的词。</p>`;
-  }
-  function getGrammarGuide(){
-    return `
-      <h2 style="color:#667eea;margin-bottom:10px;">📚 语法学习建议（简版）</h2>
-      <ol style="margin-left:20px;line-height:1.8;">
-        <li>看接续方式与语法点名称</li>
-        <li>读例句→理解用法</li>
-        <li>口头复述/写1-2个例句</li>
-      </ol>`;
-  }
-  function getReadingGuide(){
-    return `
-      <h2 style="color:#667eea;margin-bottom:10px;">📖 阅读精读四步法（简版）</h2>
-      <ol style="margin-left:20px;line-height:1.8;">
-        <li>通读（不查词）</li>
-        <li>做题（标记不确定项）</li>
-        <li>精读（查生词/不懂语法）</li>
-        <li>复读（确认理解）</li>
-      </ol>`;
-  }
-  function getListeningShortGuide(){
-    return `
-      <h2 style="color:#667eea;margin-bottom:10px;">🎧 听力精听六步法（简版）</h2>
-      <ol style="margin-left:20px;line-height:1.8;">
-        <li>初听做题</li>
-        <li>对答案并标错因</li>
-        <li>听+看原文找原因</li>
-        <li>查生词并记入</li>
-        <li>大声跟读</li>
-        <li>合上原文复听验证</li>
-      </ol>`;
-  }
-  function getShadowGuideShort(){
-    return `
-      <h2 style="color:#667eea;margin-bottom:10px;">🎧 影子跟读（简版）</h2>
-      <ul style="margin-left:20px;line-height:1.8;">
-        <li>第1遍：可看原文，小声跟读</li>
-        <li>第2遍：不看原文，大声跟读（最关键）</li>
-        <li>第3遍：挑战质量（可过渡到原速）</li>
-      </ul>`;
-  }
-  function getOptionalGuide(){
-    return `
-      <h2 style="color:#667eea;margin-bottom:10px;">🧠 机动复盘建议（简版）</h2>
-      <p style="line-height:1.8;">根据错题/不会的词句，整理成清单，快速复听/复读，完成当天总时长。</p>`;
+  // 两类语法任务文本
+  const grammarRoundLabel = (posInQueue) => {
+    if (posInQueue < 20) return '第1轮（学习：能复述接续/含义/例句）';
+    if (posInQueue < 40) return '第2轮（复习：默写接续+差别点+对应语法题检验）';
+    return '第3轮（强化：只抓高频考点+弱项回炉）';
+  };
+
+  const stateKey = 'n1_daily_check_v1_10_12_to_12_06';
+  const loadState = () => {
+    try{
+      const raw = localStorage.getItem(stateKey);
+      if(!raw) return { task: {} };
+      return JSON.parse(raw);
+    }catch(e){ return { task: {} }; }
+  };
+  const saveState = (s) => localStorage.setItem(stateKey, JSON.stringify(s));
+
+  const state = loadState();
+
+  // 生成日期列表
+  const days = [];
+  for (let d = cloneDate(startDate); d <= endDate; d.setDate(d.getDate()+1)){
+    days.push(cloneDate(d));
   }
 
-  // ==================== 初始化 ====================
-  window.addEventListener('load', ()=>{
-    currentDate = PLAN_START;
-    updateDateDisplay();
-    generateSchedule(currentDate);
+  // 今日定位
+  const today = new Date(); // 本机时间
+  const todayStr = fmt(new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0,0,0));
+
+  // tasks为每一天的时间块勾选项
+  // 生成规则：
+  // - 周一/三/五：13:00-14:00 听力；14:00-17:00 语法专项课；17:00-17:30 语法补复盘（若语法三轮未覆盖完）
+  // - 其他日（周日也算学习日）：13:00-15:00 阅读精读；15:30-16:15 听力；16:15-17:30 语法自学/复习
+  // - 周六：只生成 13:00-17:30 的任务（10-12不安排学习）
+  // - 周日：13:00-14:00 语言知识计时；14:00-15:00 阅读精读（60分钟版本）
+  //
+  // last week mock (12/01-12/05) 做覆盖：尽量不新增“新内容”，以模拟/二刷为主
+
+  const mockOverrides = new Set(['2026-12-01','2026-12-03','2026-12-04','2026-12-05']);
+
+  function getReadingForDay(dayIndex){
+    // 返回 { set, q, shortOrMidOrLong, partHint }
+    if (dayIndex < 28){
+      const setIdx = Math.floor(dayIndex/4);
+      const shortIdx = (dayIndex % 4) + 1; //1..4
+      const set = readingSetsShort[setIdx] ?? readingSetsShort[readingSetsShort.length-1];
+      return { set, q: `问题8（短篇×4）-短篇${shortIdx}`, mode:'short', partHint:`短篇${shortIdx}` };
+    }
+    if (dayIndex < 46){
+      const rel = dayIndex - 28;
+      const setIdx = Math.floor(rel/3);
+      const midIdx = (rel % 3) + 1; //1..3
+      const set = readingSetsMid[setIdx] ?? readingSetsMid[readingSetsMid.length-1];
+      return { set, q: `问题9（中篇×3）-中篇${midIdx}`, mode:'mid', partHint:`中篇${midIdx}` };
+    }
+    const rel = dayIndex - 46;
+    const set = readingSetsLong[ rel % readingSetsLong.length ];
+    const q = longQCycle[ rel % longQCycle.length ];
+    return { set, q, mode:'long', partHint:q };
+  }
+
+  function getListeningForDay(dayIndex){
+    const setIdx = Math.floor(dayIndex/2) % listeningSets.length;
+    const set = listeningSets[setIdx];
+    const isFront = (dayIndex % 2 === 0);
+    return {
+      set,
+      q: isFront ? '听力（问题1-4，前半）' : '听力（问题5-8，后半）',
+      halfLabel: isFront ? '前半' : '后半'
+    };
+  }
+
+  function getSundayLanguageSet(dayIndex){
+    // 用真题年份月份循环
+    return listeningSets[ dayIndex % listeningSets.length ];
+  }
+
+  function getGrammarUnit(posIndex){
+    return grammarQueue[posIndex] ?? null;
+  }
+
+  let gPtr = 0; // 主语法槽指针（语法队列）
+
+  // DOM
+  const dayListEl = document.getElementById('dayList');
+  const dateSelect = document.getElementById('dateSelect');
+
+  const taskEls = []; // 用于统计
+
+  // 构建一个清单条目：返回HTML字符串
+  const makeTaskHTML = ({ dayKey, taskId, timeText, title, metaText, detailsBullets, checked }) => {
+    return `
+      <div class="task">
+        <div class="row">
+          <div class="left">
+            <input type="checkbox" id="${taskId}" ${checked ? 'checked' : ''} />
+            <div>
+              <div class="tTitle">${timeText}｜${title}</div>
+              <p class="tMeta">${metaText}</p>
+            </div>
+          </div>
+        </div>
+        <details>
+          <summary>怎么做（点击展开）</summary>
+          <div class="detail">
+            <ul>
+              ${detailsBullets.map(x => `<li>${x}</li>`).join('')}
+            </ul>
+          </div>
+        </details>
+      </div>
+    `;
+  };
+
+  // 进度统计
+  function computeDayCompletion(dayTasks){
+    // dayTasks: array of taskIds
+    return dayTasks.every(id => state.task[id] === true);
+  }
+
+  // 生成所有天卡片
+  // 同时生成日期下拉
+  days.forEach((d, idx) => {
+    const key = fmt(d);
+    const dow = d.getDay();
+    const dayLabel = dayOfWeekCN(dow);
+
+    // 周六：只安排 13:00 后；周六13:00前完全不生成任务
+    const saturday = (dow === 6);
+
+    // 是否语法专项课日
+    const lecture = isLectureDay(d);
+
+    // 语法主单元 &（可选）补复盘单元
+    const mainPos = gPtr;
+    const mainUnit = getGrammarUnit(mainPos);
+    const mainRoundText = mainUnit ? grammarRoundLabel(mainPos) : '（语法轮次已覆盖完成，若有空请回到错题）';
+    gPtr = Math.min(gPtr + 1, grammarQueue.length);
+
+    // 补复盘：仅在语法课日17:00-17:30提供第二个语法槽（用于补足三轮）
+    let extraUnit = null, extraRoundText = null;
+    if (lecture && gPtr < grammarQueue.length){
+      const extraPos = gPtr;
+      extraUnit = getGrammarUnit(extraPos);
+      extraRoundText = extraUnit ? grammarRoundLabel(extraPos) : null;
+      gPtr = Math.min(gPtr + 1, grammarQueue.length);
+    }
+
+    // 阅读/听力
+    const reading = getReadingForDay(idx);
+    const listening = getListeningForDay(idx);
+
+    // 词汇目标
+    const newTarget = newTargets[key] ?? 0;
+    const inNewPhase = (key <= '2026-10-31');
+
+    // 今日任务列表（taskId）
+    const dayTasks = [];
+
+    // 下拉选项
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = key + ' ' + dayLabel;
+    dateSelect.appendChild(opt);
+
+    // 今日 mock 覆盖逻辑
+    const isMock = mockOverrides.has(key);
+
+    // 构造 day卡标题与pill
+    let pillText = '';
+    if (key === '2026-12-06') pillText = '考试日';
+    else if (lecture) pillText = '语法专项课日';
+    else if (dow === 6) pillText = '周六（仅13:00后）';
+    else pillText = '学习日';
+
+    // 每天卡片的任务HTML
+    let tasksHTML = '';
+    const tasksToRender = [];
+
+    // 公共：听写（10:00-10:15）仅非周六或非“周六整天不学习”时执行
+    const canMorning = !saturday;
+
+    // 考试日：不排学习任务（但你可以保留“最后背诵”勾选）
+    if (key === '2026-12-06'){
+      tasksToRender.push({
+        timeText:'考前｜最后检查与心态',
+        title:'2分钟：错因/耳朵记忆/准考证文件检查',
+        metaText:'不新增任务；只做“回忆激活+确认用品”',
+        detailsBullets:[
+          '浏览你听写清单中最难的 10 个词（不写，只读）',
+          '快速口头复述语法大纲里你最弱的 5 条接续差别',
+          '检查：准考证/身份证/笔/橡皮/计时用表/水'
+        ]
+      });
+    } else {
+      // 非考试日
+      if (canMorning){
+        const tid1 = `t_${key}_dictation`;
+        dayTasks.push(tid1);
+        tasksToRender.push({
+          taskId: tid1,
+          timeText:'10:00-10:15',
+          title:'听写（用昨天听写清单）',
+          metaText:'目的：纠正读音/词形，提升听力“听得懂”',
+          detailsBullets:[
+            `打开备忘录/纸质：听写清单_${days[Math.max(0, idx-1)].toISOString().slice(0,10)}（昨天）`,
+            '按清单逐词写：假名/汉字/简写均可，但务必把发音写对',
+            '纠错：把错因标到该词旁（读音/词义/词形）并“追加到明天清单”'
+          ]
+        });
+
+        const tid2 = `t_${key}_vocab`;
+        dayTasks.push(tid2);
+        tasksToRender.push({
+          taskId: tid2,
+          timeText:'10:15-11:45（APP）',
+          title:'背单词：绿宝书N1必考词',
+          metaText:`${inNewPhase ? `新学目标：≥${newTarget}词/天（以APP推送为准）` : '新学：0（只复习）'}｜复习：尽量刷满APP复习栏上限（默认100/天）`,
+          detailsBullets:[
+            'APP内直接选择《绿宝书N1必考词》词书（无需手动导入）',
+            '完成“新学”后立刻刷复习栏（不够就延后补复习，不要跳过复习）',
+            '把“错词/卡词”在离线笔记里记下：用于11:45的离线巩固'
+          ]
+        });
+
+        const tid3 = `t_${key}_offline`;
+        dayTasks.push(tid3);
+        tasksToRender.push({
+          taskId: tid3,
+          timeText:'11:45-12:00',
+          title:'离线巩固（错词/用法激活）',
+          metaText:'目的：把当天词“说出来/写出来”，减少遗忘',
+          detailsBullets:[
+            '从APP当天错词/卡词里抽10个：逐个说出日中释义（不查也尽量说）',
+            '挑5个做30秒快速默写（写词形：假名/汉字/连词记号）',
+            '用其中2个词，口头各造1句（结合你后续要用的语法点）'
+          ]
+        });
+      }
+
+      // 周六 13:00 后的学习：如果是周六，则上午不生成任务，直接从13:00开始
+      // 下面时间块生成：按 lecture / Sunday / normal
+      if (saturday){
+        // 周六安排：13:00-15:00 阅读；15:30-16:15 听力；16:15-17:30 语法
+        const tA = `t_${key}_read_sat1`;
+        dayTasks.push(tA);
+        tasksToRender.push({
+          taskId: tA,
+          timeText:'13:00-14:00',
+          title:'阅读精读（问题8/9/10-13按阶段）',
+          metaText:`${reading.set}｜${reading.q}｜目标：计时做题+定位错因`,
+          detailsBullets:[
+            '打开对应真题阅读：先做指定题（短篇：12min/篇；中篇：25min/篇；长篇/信息按参考）',
+            '只精读你选错/犹豫的句子：找指代、转折、因果、语气',
+            '把不认识的生词分级加入APP自定义词书：命中绿宝书→优先复习；否则→阅读补充复习'
+          ]
+        });
+
+        const tB = `t_${key}_read_sat2`;
+        dayTasks.push(tB);
+        tasksToRender.push({
+          taskId: tB,
+          timeText:'14:00-15:00',
+          title:'阅读错因二次精读（把“不会的点”补上）',
+          metaText:'目的：阅读准确度（错因回填到语法/词汇）',
+          detailsBullets:[
+            '回到原文：把你错题相关段落逐句读懂（至少2-3段）',
+            '用语法大纲回填：标出本篇涉及的语法点（不必立刻背全，先标记）',
+            '把本篇最多2个“最可能考的语法/搭配”写到离线“阅读错因卡”里'
+          ]
+        });
+
+        const tC = `t_${key}_listen_sat`;
+        dayTasks.push(tC);
+        tasksToRender.push({
+          taskId: tC,
+          timeText:'15:30-16:15',
+          title:'听力练习（问题对应半段）',
+          metaText:`${listening.set}｜${listening.q}`,
+          detailsBullets:[
+            '按原速完成指定半段（问题1-4或5-8）',
+            '二刷：只重听你错的题对应音段2-3遍',
+            '把“听不清/不会写”的词加入听写清单（追加到明天）'
+          ]
+        });
+
+        const tD = `t_${key}_grammar_sat`;
+        dayTasks.push(tD);
+        tasksToRender.push({
+          taskId: tD,
+          timeText:'16:15-17:30',
+          title:'语法自学/背诵（Unit）',
+          metaText:`${mainUnit ? `Unit${mainUnit}` : '语法补复盘'}｜${mainRoundText}`,
+          detailsBullets:[
+            '按语法大纲：逐条完成“接续→含义→例句中文意思→口头复述”',
+            '背诵：至少把“接续关键词+含义”连续说出来（不追求全文）',
+            '用当天对应真题语言知识里的语法题（问题3-4或语法相关）做12min自检：回填错因'
+          ]
+        });
+
+      } else {
+        // 非周六：按你可用时段（13:00-15:00 + 15:30-17:30）
+        if (lecture){
+          // lecture day
+          const t1 = `t_${key}_listen_lec`;
+          dayTasks.push(t1);
+          tasksToRender.push({
+            taskId: t1,
+            timeText:'13:00-14:00',
+            title:'听力：指定半段二刷',
+            metaText:`${listening.set}｜${listening.q}`,
+            detailsBullets:[
+              '完成指定半段一遍做题',
+              '二刷：只重听错题对应音段2-3遍，并把“听不清关键词/词形”加入听写清单（明天）',
+              '最后5分钟：跟读1个你最错的句子（模仿语调）'
+            ]
+          });
+
+          const t2 = `t_${key}_grammar_lecture`;
+          dayTasks.push(t2);
+          tasksToRender.push({
+            taskId: t2,
+            timeText:'14:00-17:00',
+            title:`语法专项课（${mainUnit ? `Unit${mainUnit}` : ''}）`,
+            metaText: mainUnit ? mainRoundText : '语法回炉',
+            detailsBullets:[
+              '课堂笔记：每条只写“接续关键词 + 含义一句话”',
+              '课堂互动：遇到老师强调点，立刻用你自己的话再解释一遍',
+              '课后最后10分钟口头连贯背本节内容（至少2遍）'
+            ]
+          });
+
+          const t3 = `t_${key}_grammar_extra_or_read`;
+          dayTasks.push(t3);
+          tasksToRender.push({
+            taskId: t3,
+            timeText:'17:00-17:30',
+            title:'补复盘：语法强化/阅读错因口述',
+            metaText: extraUnit ? `Unit${extraUnit}｜${extraRoundText}` : '阅读错因复述（2个句型）',
+            detailsBullets:[
+              extraUnit
+                ? '把 Unit'+extraUnit+' 当天重点语法：只背“接续+含义”，并用例句中文翻译复述1遍'
+                : '从今天阅读里挑2个错因相关句型：口头复述“为什么错/正确是什么”',
+              '把今天语法/阅读里最弱的点（1条）写入“错因卡片”'
+            ]
+          });
+
+        } else {
+          // normal day (Tue/Thu/Sat-after13/Sun)
+          // Sunday has language knowledge at 13:00-14:00
+          const isSunday = (dow === 0);
+
+          if (isSunday){
+            const tSunLang = `t_${key}_lang_sunday`;
+            dayTasks.push(tSunLang);
+            tasksToRender.push({
+              taskId: tSunLang,
+              timeText:'13:00-14:00',
+              title:'语言知识计时冲刺（问题1-6）',
+              metaText:`真题：${getSundayLanguageSet(idx)}｜词汇/语法/排序/完型（按参考用时）`,
+              detailsBullets:[
+                '词汇题：6min（越快越好）',
+                '语法题：12min',
+                '排序：5min、完型：10min',
+                '做完立刻对答案：只记录错因Top3（接续/含义/搭配/语感）并标回语法大纲对应Unit'
+              ]
+            });
+          }
+
+          // 阅读精读（13-15 或 14-15）
+          const read1Time = isSunday ? '14:00-15:00' : '13:00-14:00';
+          const read2Time = isSunday ? null : '14:00-15:00';
+
+          const tReadA = `t_${key}_readA`;
+          dayTasks.push(tReadA);
+          tasksToRender.push({
+            taskId: tReadA,
+            timeText: read1Time,
+            title:'阅读精读：完成指定题（做题+定位错因）',
+            metaText:`${reading.set}｜${reading.q}｜目标：计时做题 + 找错因`,
+            detailsBullets:[
+              '严格按题型参考用时完成指定部分（短篇优先：12min/篇；中篇：25min/篇；对比7min；信息查找5min）',
+              '只精读你错选/犹豫的句子：指代（それ/この/あれ等）、转折（しかし/ところが）、因果（〜ので/ために）',
+              '生词：不认识→加入APP自定义词书（命中绿宝书→优先复习；否则→阅读补充复习）'
+            ]
+          });
+
+          if (read2Time){
+            const tReadB = `t_${key}_readB`;
+            dayTasks.push(tReadB);
+            tasksToRender.push({
+              taskId: tReadB,
+              timeText: read2Time,
+              title:'阅读错因二次精读（补上“不会点”）',
+              metaText:'目的：提升准确度（把错因回填到语法/词汇）',
+              detailsBullets:[
+                '回到原文：把错因对应段落逐句读懂（至少2-3段）',
+                '用语法大纲回填：标记涉及Unit（不必立刻背全，至少标星）',
+                '最后5分钟：口头复述本篇最关键的2句（保证“读懂”不是“猜对”）'
+              ]
+            });
+          }
+
+          // 听力
+          const tListen = `t_${key}_listen_norm`;
+          dayTasks.push(tListen);
+          tasksToRender.push({
+            taskId: tListen,
+            timeText:'15:30-16:15',
+            title:'听力：指定半段（原速+二刷错段）',
+            metaText:`${listening.set}｜${listening.q}`,
+            detailsBullets:[
+              '原速完成指定半段一遍做题',
+              '二刷：只重听你错的题对应音段2-3遍（集中攻克）',
+              '新增词：把听不清/写不出的词加入“听写清单（明天）”'
+            ]
+          });
+
+          // 语法
+          const tGrammar = `t_${key}_grammar_norm`;
+          dayTasks.push(tGrammar);
+          tasksToRender.push({
+            taskId: tGrammar,
+            timeText:'16:15-17:30',
+            title:'语法自学/复习/强化（Unit）',
+            metaText: mainUnit ? `Unit${mainUnit}｜${mainRoundText}` : '语法补复盘',
+            detailsBullets:[
+              '学习/复习按轮次要求：接续→含义→例句中文意思→口头复述',
+              '背诵：至少背出“接续关键词+含义”连续说2遍',
+              '检验：用当天语言知识里的“语法相关题”做12min自检并回填错因'
+            ]
+          });
+        }
+      }
+    }
+
+    // mock overrides：把 12/01、12/03 等的“阅读/听力”任务文字覆盖（不改整体勾选结构）
+    // 这里用简单方式：替换当天卡片中包含“阅读精读/听力/语言知识计时”的标题与说明（尽量保持时间块数量一致）
+    // 为避免复杂重写，采用在 tasksToRender 上就地改写当前条目标题即可。
+    if (isMock && key !== '2026-12-06'){
+      // 将部分关键任务改为“模拟/二刷”
+      const findAndPatch = (needleTitleIncludes, patcher) => {
+        for (const t of tasksToRender){
+          if (t.title && t.title.includes(needleTitleIncludes)){
+            patcher(t);
+          }
+        }
+      };
+
+      if (key === '2026-12-01'){
+        findAndPatch('语言知识计时冲刺', (t)=> {
+          t.metaText = '模拟：用 2025/12（问题1-6）按参考用时完成并复盘错因Top3';
+          t.detailsBullets = [
+            '严格计时完成：词汇6min + 语法12min + 排序5min + 完型10min（总计约33min）',
+            '对答案：只做错因归类（接续/含义/搭配/语感）并回填到语法大纲',
+            '把Top3错因各找1个例句再口头复述'
+          ];
+        });
+        findAndPatch('阅读精读', (t)=> {
+          t.title = '阅读模拟（按参考完成指定部分+复盘）';
+          t.metaText = '真题：2025/12｜目标：语言知识30min左右 + 阅读尽量覆盖80min（本天优先做错因精读）';
+          t.detailsBullets = [
+            '按你网页当日任务时间完成阅读指定部分（不追求全套：优先保证长篇/对比/信息查找错因精读）',
+            '二刷错题对应段落：逐句读懂并标出指代/转折/因果',
+            '把阅读生词按A/B分级加入APP自定义词书'
+          ];
+        });
+      }
+
+      if (key === '2026-12-03'){
+        findAndPatch('语言知识计时冲刺', (t)=> {
+          t.metaText = '模拟：用 2025/07（问题1-6）按参考用时完成并复盘错因Top3';
+          t.detailsBullets = [
+            '严格计时完成：词汇6min + 语法12min + 排序5min + 完型10min',
+            '对答案：把错因Top3写成“下一次怎么做”一句话',
+            '回到语法大纲对应Unit：口头复述接续与含义'
+          ];
+        });
+        findAndPatch('阅读精读', (t)=> {
+          t.title = '阅读二刷模拟（错因精读为主）';
+          t.metaText = '真题：2025/07｜本天完成你最弱题型（优先长篇/信息查找）';
+          t.detailsBullets = [
+            '做题优先保证准确：先选对，再回读原句',
+            '错因精读：每个错题至少读懂1个关键句',
+            '把阅读生词加入自定义词书（A优先复习/B阅读补充）'
+          ];
+        });
+      }
+
+      if (key === '2026-12-04'){
+        findAndPatch('听力：', (t)=> {
+          t.title = '听力模拟（更强的二刷：错段+跟读）';
+          t.metaText = '真题：2025/07｜目标：把听不懂变成“能复述”';
+          t.detailsBullets = [
+            '指定半段一遍做题',
+            '二刷：只重听错题音段2-3遍，并跟读1-2句',
+            '把听写词追加到“明天听写清单”'
+          ];
+        });
+        findAndPatch('阅读精读', (t)=> {
+          t.title = '阅读：对比/信息查找精读（保证正确率）';
+          t.metaText = `真题：2025/07｜优先做问题11或问题13（以阶段生成内容为准）`;
+          t.detailsBullets = [
+            '信息查找题：把题干关键词在原文定位后再看选项',
+            '对比题：逐项对照“差别句”只找一个最关键差异点',
+            '错因回填到语法/词汇：用语法大纲标星'
+          ];
+        });
+      }
+
+      if (key === '2026-12-05'){
+        // 尽量不做“新内容”：把阅读/听力/语法任务改成回炉
+        for (const t of tasksToRender){
+          if (!t.taskId) continue;
+          if (t.title && t.title.includes('阅读精读')){
+            t.title = '阅读错因回炉（不追新题）';
+            t.metaText = '只重读昨天/前天错句：做到“再错也能纠正”';
+            t.detailsBullets = [
+              '挑最近3天你错的题型：各精读1个关键段落',
+              '把生词只回看到APP自定义词书里并复习',
+              '口头复述每段核心信息（1分钟/段以内）'
+            ];
+          }
+          if (t.title && t.title.includes('听力')){
+            t.title = '听力跟读/跟写（错段复习）';
+            t.metaText = '不新增真题：优先重听你听写清单里的高频词所在句';
+            t.detailsBullets = [
+              '打开你最近做错的听力音段（按你错题记录找）',
+              '跟读3遍：语调/停顿模仿',
+              '把仍写不准的词加入今天听写确认（明天考试用）'
+            ];
+          }
+          if (t.title && t.title.includes('语法自学')){
+            t.title = '语法背诵回炉（只背接续+含义）';
+            t.metaText = '用错因卡：每天背最弱的5条接续差别';
+            t.detailsBullets = [
+              '从“错因卡片/标星Unit”中挑5条',
+              '只背接续+含义+1个例句意思（不展开全文）',
+              '用2分钟口头抽测：随机说接续关键词→你说含义'
+            ];
+          }
+        }
+      }
+    }
+
+    // 生成HTML
+    tasksHTML = tasksToRender.map(t => {
+      if (t.taskId){
+        const tid = t.taskId;
+        const checked = state.task[tid] === true;
+        return makeTaskHTML({
+          dayKey: key,
+          taskId: tid,
+          timeText: t.timeText,
+          title: t.title,
+          metaText: t.metaText,
+          detailsBullets: t.detailsBullets,
+          checked
+        });
+      } else {
+        // non-checkbox card (e.g., exam day)
+        return `
+          <div class="task">
+            <div class="row">
+              <div class="left">
+                <div style="width:18px;height:18px;border-radius:6px;background:rgba(46,233,166,.16);border:1px solid rgba(46,233,166,.35);margin-top:2px;"></div>
+                <div>
+                  <div class="tTitle">${t.timeText}｜${t.title}</div>
+                  <p class="tMeta">${t.metaText}</p>
+                </div>
+              </div>
+            </div>
+            <details>
+              <summary>怎么做（点击展开）</summary>
+              <div class="detail"><ul>${t.detailsBullets.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+            </details>
+          </div>
+        `;
+      }
+    }).join('');
+
+    const totalTasksCount = tasksToRender.filter(t => t.taskId).length;
+    const completedCount = tasksToRender.filter(t => t.taskId && state.task[t.taskId] === true).length;
+    const pct = totalTasksCount ? Math.round((completedCount/totalTasksCount)*100) : 0;
+
+    // 连续完成天数（先不在这里计算，统一在渲染后算）
+    const dayCard = document.createElement('div');
+    dayCard.className = 'dayCard';
+    dayCard.id = `day_${key}`;
+    dayCard.innerHTML = `
+      <div class="dayHeader">
+        <div class="meta">
+          <div class="date">
+            <span>${key}</span>
+            <span class="pill">${pillText}</span>
+          </div>
+          <div class="sub">
+            ${dayLabel} · 阅读：${reading.set}（${reading.q}） · 听力：${listening.set}（${listening.q}） · 语法：Unit${mainUnit ?? '—'}
+          </div>
+        </div>
+        <div class="right">
+          <div class="tiny">今日完成：${completedCount}/${totalTasksCount}</div>
+          <div class="dayProgress">
+            <div class="bar"><i style="width:${pct}%;"></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="tasks">
+        ${tasksHTML || '<div class="task"><div class="tTitle">本日无学习任务</div><p class="tMeta">周六13:00前休息，或考试日无任务。</p></div>'}
+      </div>
+    `;
+    dayListEl.appendChild(dayCard);
+
+    // 统计任务元素用于点击监听
+    tasksToRender.forEach(t => {
+      if (!t.taskId) return;
+      taskEls.push(t.taskId);
+    });
+
+    // 将该日全部taskId记录到全局用于计算“当天是否完成”
+    dayCard.dataset.dayKey = key;
+    dayCard.dataset.dayTaskIds = dayTasks.join(',');
   });
+
+  // 监听checkbox变化
+  const allCheckboxes = Array.from(document.querySelectorAll('input[type="checkbox"]'));
+  allCheckboxes.forEach(cb => {
+    cb.addEventListener('change', (e) => {
+      const id = e.target.id;
+      if (!state.task) state.task = {};
+      state.task[id] = e.target.checked === true;
+      saveState(state);
+      // 刷新统计
+      refreshUI();
+    });
+  });
+
+  // 计算连续完成天数：从最末尾往前，连续“整天全部任务勾选”则计入
+  function computeStreak(){
+    // 收集每一天是否完成
+    const completionByDay = [];
+    for (const dayCard of document.querySelectorAll('.dayCard')){
+      const key = dayCard.dataset.dayKey;
+      const taskIds = (dayCard.dataset.dayTaskIds || '').split(',').filter(Boolean);
+      if (taskIds.length === 0){
+        completionByDay.push({ key, done:true }); // 不算，或当作done
+        continue;
+      }
+      const done = taskIds.every(tid => state.task[tid] === true);
+      completionByDay.push({ key, done });
+    }
+
+    // streak ending at latest day that is done (prior if today not done)
+    let streak = 0;
+    for (let i = completionByDay.length - 1; i >= 0; i--){
+      if (completionByDay[i].done){
+        streak++;
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }
+
+  function refreshUI(){
+    const dayCards = Array.from(document.querySelectorAll('.dayCard'));
+    let totalTasks = 0;
+    let doneTasks = 0;
+    let doneDays = 0;
+
+    let completedDaysList = [];
+
+    for (const dayCard of dayCards){
+      const taskIds = (dayCard.dataset.dayTaskIds || '').split(',').filter(Boolean);
+      const total = taskIds.length;
+      totalTasks += total;
+
+      let done = 0;
+      for (const tid of taskIds){
+        if (state.task && state.task[tid] === true) done++;
+      }
+      doneTasks += done;
+
+      if (total > 0 && done === total){
+        doneDays++;
+        completedDaysList.push(dayCard.dataset.dayKey);
+      }
+
+      // update day header progress
+      const completedCount = done;
+      const pct = total ? Math.round((completedCount/total)*100) : 0;
+      const iEl = dayCard.querySelector('.dayProgress .bar i');
+      const text = dayCard.querySelector('.dayHeader .right .tiny');
+      if (iEl) iEl.style.width = pct + '%';
+      if (text) text.textContent = `今日完成：${completedCount}/${total}`;
+    }
+
+    const overallPct = totalTasks ? Math.round((doneTasks/totalTasks)*100) : 0;
+    document.getElementById('overallBar').style.width = overallPct + '%';
+    document.getElementById('overallText').textContent = `已完成：${doneTasks}/${totalTasks}（${overallPct}%）`;
+    document.getElementById('doneCount').textContent = `${doneTasks} / ${totalTasks}`;
+    document.getElementById('doneDays').textContent = `${doneDays} / ${dayCards.length}`;
+
+    const streak = computeStreak();
+    document.getElementById('streak').textContent = `${streak} 天`;
+
+    // 高亮今天
+    const sel = document.querySelector(`.dayCard[id^="day_${todayStr}"]`);
+    dayCards.forEach(c => c.style.outline = 'none');
+    if (sel){
+      sel.style.outline = '2px solid rgba(46,233,166,.55)';
+      sel.style.outlineOffset = '2px';
+    }
+
+    // 若今天所有任务完成，给个轻提示（小心不打扰）
+    const todayCard = sel;
+    if (todayCard){
+      const taskIds = (todayCard.dataset.dayTaskIds || '').split(',').filter(Boolean);
+      const total = taskIds.length;
+      if (total > 0 && taskIds.every(tid => state.task && state.task[tid] === true)){
+        // 可选：弹窗提示（这里不强制）
+      }
+    }
+  }
+
+  refreshUI();
+
+  // dateSelect change -> scroll
+  dateSelect.addEventListener('change', () => {
+    const key = dateSelect.value;
+    const el = document.getElementById(`day_${key}`);
+    if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+  });
+
+  // Jump to today
+  document.getElementById('scrollTodayBtn').addEventListener('click', () => {
+    const el = document.getElementById(`day_${todayStr}`);
+    if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+    else alert('今天不在本清单日期范围内：2026/10/12 - 2026/12/06');
+  });
+
+  // Reset
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    if (!confirm('确定要清空本网页在本地的打钩记录吗？')) return;
+    localStorage.removeItem(stateKey);
+    location.reload();
+  });
+
+})();
 </script>
 </body>
 </html>
